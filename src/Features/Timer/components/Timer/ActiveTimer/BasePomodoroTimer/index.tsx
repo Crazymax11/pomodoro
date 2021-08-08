@@ -27,8 +27,6 @@ export const BasePomodoroTimer = ({
   onComplete,
   onUnpause,
 }: Props) => {
-  const buttonText = isPaused ? 'Запуск' : 'Пауза';
-
   const { time, flush } = useTimer(isPaused);
   const onPauseBtnClick = useCallback(() => {
     if (isPaused) {
