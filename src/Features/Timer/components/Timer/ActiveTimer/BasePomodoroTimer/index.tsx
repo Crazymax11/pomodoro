@@ -1,8 +1,10 @@
+import classnames from 'classnames';
 import React, { useCallback, useEffect } from 'react';
 import { TimeEntryType } from '../../../../../types';
 
 import { formatToReadableTime, seconds } from '../../../../../utils';
 import { useTimer } from '../../useTimer';
+import styles from './index.module.css';
 
 type Props = {
   type: TimeEntryType.Pomodoro | TimeEntryType.Rest;
@@ -49,11 +51,21 @@ export const BasePomodoroTimer = ({
   }, [restingTime, onComplete]);
 
   return (
-    <div>
-      <div>{type}</div>
-      <button onClick={onPauseBtnClick}>{buttonText}</button>
-      <div>{restingTime > 0 ? formatToReadableTime(restingTime) : 0}</div>
-      <button onClick={onDropBtnClick}>Сбросить</button>
+    <div className={styles.wrapper}>
+      <div
+        className={classnames(
+          styles.timer,
+          type === TimeEntryType.Pomodoro ? styles.pomodoro : styles.rest,
+        )}
+      >
+        {restingTime > 0 ? formatToReadableTime(restingTime) : 0}
+      </div>
+      <span className={styles.pauseButton} onClick={onPauseBtnClick}>
+        {isPaused ? '▶️' : '⏸️'}
+      </span>
+      <span className={styles.pauseButton} onClick={onDropBtnClick}>
+        🚫
+      </span>
     </div>
   );
 };
