@@ -28,7 +28,7 @@ const mapDispatch = () => {
     onPause: (completedTime: number) => dispatch(actions.PauseCurrent(completedTime)),
     onUnpause: () => dispatch(actions.UnpauseCurrent()),
     onRest: () => dispatch(actions.startResting(minutes(5))),
-    onStartPomodoro: () => dispatch(actions.startPomodoro(minutes(25))),
+    onStartPomodoro: (time: number) => dispatch(actions.startPomodoro(time)),
     onIdle: () => dispatch(actions.idle()),
     onStartPureTime: () => dispatch(actions.startPureTime()),
   };
@@ -41,13 +41,7 @@ export const TimerPure = (props: Props) => {
   }
 
   if (props.state === TimerState.SuggestResting) {
-    return (
-      <SuggestResting
-        onRest={props.onRest}
-        onIdle={props.onIdle}
-        onPomodoro={props.onStartPomodoro}
-      />
-    );
+    return <SuggestResting onRest={props.onRest} onIdle={props.onIdle} onPomodoro={props.onIdle} />;
   }
   if (!props.entry) {
     return null;
