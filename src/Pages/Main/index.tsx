@@ -7,7 +7,9 @@ export const Main = () => {
   return (
     <div className={styles.layout}>
       <TodayStats />
-      <Timer />
+      <div className={styles.content}>
+        <Timer />
+      </div>
     </div>
   );
 };

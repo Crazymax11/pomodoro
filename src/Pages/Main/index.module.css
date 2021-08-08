@@ -2,5 +2,12 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  justify-content: center;
+}
+
+.content {
+  flex-grow: 1;
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  display: flex;
 }
