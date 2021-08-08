@@ -1,0 +1,22 @@
+.timer {
+  font-size: 60px;
+}
+
+.pauseButton {
+  cursor: pointer;
+  font-size: 60px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rest {
+  color: green;
+}
+
+.pomodoro {
+  color: tomato;
+}

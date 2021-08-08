@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { formatToReadableTime, seconds } from '../../../../../utils';
 import { useTimer } from '../../useTimer';
+import styles from './index.module.css';
 
 type Props = {
   isPaused: boolean;
@@ -27,11 +28,15 @@ export const Pure = ({ completedTime = 0, isPaused, onUnpause, onComplete, onPau
 
   const workingTime = completedTime + seconds(time);
   return (
-    <div>
-      <div> Pure Time</div>
-      <div> {formatToReadableTime(workingTime)}</div>
-      <button onClick={onPauseBtnClick}>pause</button>
-      <button onClick={onCompleteBtnClick}>stop</button>
+    <div className={styles.wrapper}>
+      <div className={styles.timer}> {formatToReadableTime(workingTime)}</div>
+      <span className={styles.pauseButton} onClick={onPauseBtnClick}>
+        ▶️
+      </span>
+
+      <span className={styles.pauseButton} onClick={onCompleteBtnClick}>
+        🚫
+      </span>
     </div>
   );
 };
