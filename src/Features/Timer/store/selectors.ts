@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
 import { TimeEntryType } from '../../types';
 import { TimeEntry, TimerState } from '../types';
 
