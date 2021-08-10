@@ -3,7 +3,7 @@ import { getTodayStats } from '../../Stats/store/selectors';
 
 import { TimeEntryType } from '../../types';
 import { minutes, seconds } from '../../utils';
-import { dingAlert } from '../DingAlert';
+import { dingAlert } from '../dingAlert';
 import { TimerState } from '../types';
 import {
   CompleteCurrent,
