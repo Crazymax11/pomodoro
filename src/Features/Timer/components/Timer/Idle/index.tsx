@@ -22,7 +22,7 @@ const PomodoroButton = ({ size, onStart }: PomodoroButtonProps) => {
   );
 };
 
-const sizes = [5, 10, 15, 20, 40];
+const sizes = [1, 10, 15, 20, 40];
 export const Idle = ({ onStartPomodoro, onStartPureTime }: Props) => {
   const pomodoroButtons = useMemo(
     () =>

@@ -1,7 +1,9 @@
 import { createStore } from '../../../store';
 import { getTodayStats } from '../../Stats/store/selectors';
+
 import { TimeEntryType } from '../../types';
 import { minutes, seconds } from '../../utils';
+import { dingAlert } from '../DingAlert';
 import { TimerState } from '../types';
 import {
   CompleteCurrent,
@@ -13,8 +15,10 @@ import {
   startResting,
   UnpauseCurrent,
 } from './actions';
-
 import { getCurrentCompletedTime, getCurrentTimerType, getState } from './selectors';
+
+jest.mock('../../Sync/Syncer');
+jest.mock('../dingAlert');
 
 describe('TimerStore', () => {
   it('должен вернуть Idle стейт в самом начале', () => {

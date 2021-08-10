@@ -3,6 +3,7 @@ import { statsReducer } from './Features/Stats/store/reducer';
 import * as statsSelectors from './Features/Stats/store/selectors';
 import * as timerSelectors from './Features/Timer/store/selectors';
 import { timerReducer } from './Features/Timer/store/reducer';
+import { syncer } from './Features/Sync/Syncer';
 
 export const createStore = () =>
   configureStore({
@@ -13,8 +14,7 @@ export const createStore = () =>
         const state = store.getState();
         const stats = statsSelectors.getStateForSync(state);
         const timer = timerSelectors.getStateForSync(state);
-
-        localStorage.setItem('pomodoro', JSON.stringify({ stats, timer }));
+        syncer.save({ timer, stats });
       }),
   } as any);
 export const store = createStore();
