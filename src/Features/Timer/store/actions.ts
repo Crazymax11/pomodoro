@@ -2,7 +2,7 @@ import { ActionBody } from '../../../store';
 import { statsEvents } from '../../Stats/store/events';
 import { makeCompletedEntry, makeDropedEntry } from '../../Stats/store/utils';
 import { TimeEntryType } from '../../types';
-import { dingAlert } from '../DingAlert';
+import { dingAlert } from '../dingAlert';
 import { TimeEntry } from '../types';
 import { events } from './events';
 import { getEntry } from './selectors';
