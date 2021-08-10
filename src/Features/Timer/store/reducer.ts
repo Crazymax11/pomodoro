@@ -42,7 +42,8 @@ export const timerReducer = createReducer(initialState, (builder) => {
     })
     .addCase(events.idle, (state) => {
       state.state = TimerState.Idle;
-    });
+    })
+    .addCase(events.initialize, (_, { payload }) => payload);
 });
 
 /* eslint-enable no-param-reassign */

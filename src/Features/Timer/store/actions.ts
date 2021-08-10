@@ -2,9 +2,11 @@ import { ActionBody } from '../../../store';
 import { statsEvents } from '../../Stats/store/events';
 import { makeCompletedEntry, makeDropedEntry } from '../../Stats/store/utils';
 import { TimeEntryType } from '../../types';
+import { dingAlert } from '../dingAlert';
 import { TimeEntry } from '../types';
 import { events } from './events';
 import { getEntry } from './selectors';
+import { State } from './types';
 
 export const startPomodoro =
   (size: number): ActionBody =>
@@ -95,6 +97,12 @@ export const CompleteCurrent =
       ),
     );
     dispatch(events.complete());
+    dingAlert();
   };
 
 export const idle = (): ActionBody => (dispatch) => dispatch(events.idle());
+
+export const initialize =
+  (state: State): ActionBody =>
+  (dispatch) =>
+    dispatch(events.initialize(state));

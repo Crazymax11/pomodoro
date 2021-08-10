@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
 import { TimeEntryType } from '../../types';
 import { TimeEntry, TimerState } from '../types';
 
@@ -24,4 +25,17 @@ export const getEntry: (store: any) => TimeEntry | undefined = createSelector(
 export const getCurrentCompletedTime: (store: any) => number | undefined = createSelector(
   getTimerState,
   (state) => state.entry?.completedTime,
+);
+
+export const getStateForSync: (store: RootState) => State = createSelector(
+  getTimerState,
+  (state) => {
+    if (state.state === TimerState.Active) {
+      return {
+        ...state,
+        state: TimerState.Paused,
+      };
+    }
+    return state;
+  },
 );
