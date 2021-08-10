@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
 import { TimeEntryType } from '../../types';
 
 import { ResolutionType, State } from './types';
@@ -39,3 +40,8 @@ export const getTodayStats = createSelector([getStatsState], (state) => {
     },
   );
 });
+
+export const getStateForSync: (store: RootState) => State = createSelector(
+  getStatsState,
+  (state) => state,
+);

@@ -26,3 +26,16 @@ export const getCurrentCompletedTime: (store: any) => number | undefined = creat
   getTimerState,
   (state) => state.entry?.completedTime,
 );
+
+export const getStateForSync: (store: RootState) => State = createSelector(
+  getTimerState,
+  (state) => {
+    if (state.state === TimerState.Active) {
+      return {
+        ...state,
+        state: TimerState.Paused,
+      };
+    }
+    return state;
+  },
+);
