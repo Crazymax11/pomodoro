@@ -1,31 +1,31 @@
+import { useStoreMap } from 'effector-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { $stats } from '../../../../store/stats';
+import { TimeEntryType } from '../../../types';
+
 import { formatToReadableTime } from '../../../utils';
-import { getTodayStats } from '../../store/selectors';
+
 import styles from './index.module.css';
 
-const mapState = (store: any) => {
-  return {
-    todayStats: getTodayStats(store),
-  };
+type Props = {
+  totalTime: number;
+  pomodorosCount: number;
 };
-
-type Props = ReturnType<typeof mapState>;
 export const TodayStatsPure = (props: Props) => {
-  const totalTime =
-    props.todayStats.pomodoros.totalTime +
-    props.todayStats.pureTimes.totalTime +
-    props.todayStats.rests.totalTime;
   return (
     <div className={styles.wrapper}>
       <div>За сегодня</div>
-      <div>🍅 {props.todayStats.pomodoros.completed} </div>
-      <div>🕰️ {formatToReadableTime(totalTime)} </div>
+      <div>🍅 {props.pomodorosCount} </div>
+      <div>🕰️ {formatToReadableTime(props.totalTime)} </div>
     </div>
   );
 };
 
 export const TodayStats = () => {
-  const state = useSelector(mapState);
-  return <TodayStatsPure {...state} />;
+  const { totalTime, pomodorosCount } = useStoreMap($stats, (state) => ({
+    totalTime: state.entries.reduce((acc, entry) => acc + entry.completedTime, 0),
+    pomodorosCount: state.entries.filter((entry) => entry.type === TimeEntryType.Pomodoro).length,
+  }));
+
+  return <TodayStatsPure totalTime={totalTime} pomodorosCount={pomodorosCount} />;
 };

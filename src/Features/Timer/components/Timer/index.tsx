@@ -1,40 +1,38 @@
-import React from 'react';
+import { useStore } from 'effector-react';
+import React, { useCallback } from 'react';
+import {
+  startResting,
+  unpauseTimer,
+  pauseTimer,
+  complete,
+  startPomodoro,
+  startPureTime,
+  toIdle,
+  drop,
+} from '../../../../store/index';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { $currentEntry } from '../../../../store/currentEntry';
+import { $timerState } from '../../../../store/timer';
 
 import { minutes } from '../../../utils';
-import * as actions from '../../store/actions';
-import * as selectors from '../../store/selectors';
-import { TimerState } from '../../types';
+
+import { TimeEntry, TimerState } from '../../types';
 import { ActiveTimer } from './ActiveTimer';
 import { Idle } from './Idle';
 import { SuggestResting } from './SuggestResting';
 
-const mapState = (store: any) => {
-  return {
-    currentType: selectors.getCurrentTimerType(store),
-    state: selectors.getState(store),
-    entry: selectors.getEntry(store),
-  };
+type Props = {
+  onDrop: () => any;
+  onComplete: (completedTime?: number) => any;
+  onPause: (completedTime: number) => any;
+  onUnpause: () => any;
+  onRest: () => any;
+  onStartPomodoro: (time: number) => any;
+  onIdle: () => any;
+  onStartPureTime: () => any;
+  state: TimerState;
+  entry?: TimeEntry;
 };
-
-const mapDispatch = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const dispatch = useDispatch();
-
-  return {
-    onDrop: (completedTime: number) => dispatch(actions.DropCurrent(completedTime)),
-    onComplete: (completedTime?: number) => dispatch(actions.CompleteCurrent(completedTime)),
-    onPause: (completedTime: number) => dispatch(actions.PauseCurrent(completedTime)),
-    onUnpause: () => dispatch(actions.UnpauseCurrent()),
-    onRest: () => dispatch(actions.startResting(minutes(5))),
-    onStartPomodoro: (time: number) => dispatch(actions.startPomodoro(time)),
-    onIdle: () => dispatch(actions.idle()),
-    onStartPureTime: () => dispatch(actions.startPureTime()),
-  };
-};
-
-type Props = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
 export const TimerPure = (props: Props) => {
   if (props.state === TimerState.Idle) {
     return <Idle onStartPomodoro={props.onStartPomodoro} onStartPureTime={props.onStartPureTime} />;
@@ -60,9 +58,24 @@ export const TimerPure = (props: Props) => {
 };
 
 export const Timer = () => {
-  const state = useSelector(mapState);
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const actions = mapDispatch();
+  const entry = useStore($currentEntry);
+  const timerState = useStore($timerState);
+  const onRest = useCallback(() => {
+    startResting(minutes(5));
+  }, []);
 
-  return <TimerPure {...state} {...actions} />;
+  return (
+    <TimerPure
+      state={timerState}
+      entry={entry || undefined}
+      onDrop={drop}
+      onComplete={complete}
+      onPause={pauseTimer}
+      onUnpause={unpauseTimer}
+      onRest={onRest}
+      onStartPomodoro={startPomodoro}
+      onIdle={toIdle}
+      onStartPureTime={startPureTime}
+    />
+  );
 };

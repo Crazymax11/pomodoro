@@ -12,11 +12,11 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.6.1",
     "classnames": "^2.3.1",
+    "effector": "^21.8.12",
+    "effector-react": "^21.3.3",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-redux": "^7.2.4"
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
