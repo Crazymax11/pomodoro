@@ -12,6 +12,7 @@ export const timerEvents = {
   start: domain.createEvent(),
   pause: domain.createEvent(),
   suggestResting: domain.createEvent(),
+  init: domain.createEvent<TimerState>(),
 };
 
 export const $timerState = domain
@@ -19,4 +20,5 @@ export const $timerState = domain
   .on(timerEvents.idle, () => TimerState.Idle)
   .on(timerEvents.pause, () => TimerState.Paused)
   .on(timerEvents.start, () => TimerState.Active)
-  .on(timerEvents.suggestResting, () => TimerState.SuggestResting);
+  .on(timerEvents.suggestResting, () => TimerState.SuggestResting)
+  .on(timerEvents.init, (state, payload) => payload);

@@ -5,7 +5,6 @@ export type TimeEntry = {
   size?: number;
   startTime: number;
   completedTime: number;
-  paused: boolean;
 };
 
 export enum TimerState {

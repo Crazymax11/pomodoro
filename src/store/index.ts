@@ -21,9 +21,8 @@ const createTimeEntry =
   (type: TimeEntryType) =>
   (size?: number | void): TimeEntry => ({
     type,
-    size: size || undefined,
+    size: type === TimeEntryType.Time ? undefined : size || undefined,
     startTime: Date.now(),
-    paused: false,
     completedTime: 0,
   });
 

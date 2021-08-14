@@ -10,6 +10,7 @@ export type TimeEntry = {
 };
 export const statsEvents = {
   addEntry: domain.createEvent<TimeEntry>(),
+  init: domain.createEvent<{ entries: TimeEntry[] }>(),
 };
 
 const initialState: {
@@ -21,4 +22,5 @@ export const $stats = domain
   .createStore(initialState)
   .on(statsEvents.addEntry, (state, payload) => ({
     entries: [...state.entries, payload],
-  }));
+  }))
+  .on(statsEvents.init, (_, payload) => payload);
