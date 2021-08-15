@@ -36,6 +36,7 @@ export const Main = () => {
     const possibleItem = localStorage.getItem('pomodoro');
 
     if (!possibleItem) {
+      synced();
       return;
     }
     const { entry, stats, timer } = JSON.parse(possibleItem);
