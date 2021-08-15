@@ -16,7 +16,6 @@ Primary.args = {
   isPaused: false,
   size: seconds(25),
   completedTime: 0,
-  onComplete: () => {},
   onDrop: () => {},
   onPause: () => {},
   onUnpause: () => {},

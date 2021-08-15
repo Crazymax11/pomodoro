@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof Pure> = (args) => <Pure {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onComplete: () => {},
+  onCompletePureTime: () => {},
   onPause: () => {},
   onUnpause: () => {},
 };
