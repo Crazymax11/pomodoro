@@ -1,10 +1,12 @@
+const dingAudio = new Audio('ding-sound-effect_2.mp3');
+
+const tickAudio = new Audio('tick.mp3');
+tickAudio.volume = 0.2;
 export const sounder = {
   ding: () => {
-    const snd = new Audio('ding-sound-effect_2.mp3');
-    snd.play();
+    dingAudio.play();
   },
   tick: () => {
-    const snd = new Audio('tick.mp3');
-    snd.play();
+    tickAudio.play();
   },
 };
