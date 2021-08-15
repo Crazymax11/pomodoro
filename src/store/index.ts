@@ -60,7 +60,7 @@ guard({
     if (!entry) {
       return false;
     }
-    if (entry.completedTime === entry.size) {
+    if (entry.size && entry.completedTime >= entry.size) {
       return true;
     }
 
