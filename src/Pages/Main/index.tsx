@@ -1,5 +1,6 @@
 import { combine, createEvent, createStore } from 'effector';
 import React, { useEffect } from 'react';
+import { TodayChart } from '../../Features/Stats/components/TodayChart';
 
 import { TodayStats } from '../../Features/Stats/components/TodayStats';
 
@@ -80,6 +81,10 @@ export const Main = () => {
 
   return (
     <div className={styles.layout}>
+      <div style={{ marginBottom: 12 }}>
+        <TodayChart />
+      </div>
+
       <TodayStats />
       <div className={styles.content}>
         <Timer />
