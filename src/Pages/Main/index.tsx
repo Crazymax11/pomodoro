@@ -56,6 +56,7 @@ export const Main = () => {
 
       if (!entry) {
         document.title = 'Pomodoro Timer';
+        // @ts-ignore
         link.href = entryTypeIcons[TimeEntryType.Pomodoro];
         return;
       }
@@ -66,6 +67,7 @@ export const Main = () => {
           : formatToReadableTime(entry!.size! - entry.completedTime);
 
       document.title = time;
+      // @ts-ignore
       link.href = entryTypeIcons[entry.type];
     });
   }, []);
