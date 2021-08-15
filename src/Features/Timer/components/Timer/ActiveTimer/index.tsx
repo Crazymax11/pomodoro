@@ -9,9 +9,9 @@ import { Resting } from './Resting';
 type Props = {
   entry: TimeEntry;
   isPaused: boolean;
-  onDrop: (completedTime: number) => any;
-  onComplete: (completedTime?: number) => any;
-  onPause: (completedTime: number) => any;
+  onDrop: () => any;
+  onCompletePureTime: () => any;
+  onPause: () => any;
   onUnpause: () => any;
 };
 export const ActiveTimer = (props: Props) => {
@@ -21,7 +21,6 @@ export const ActiveTimer = (props: Props) => {
         size={props.entry.size!}
         isPaused={props.isPaused}
         completedTime={props.entry.completedTime}
-        onComplete={props.onComplete}
         onDrop={props.onDrop}
         onPause={props.onPause}
         onUnpause={props.onUnpause}
@@ -35,7 +34,6 @@ export const ActiveTimer = (props: Props) => {
         size={props.entry.size!}
         isPaused={props.isPaused}
         completedTime={props.entry.completedTime}
-        onComplete={props.onComplete}
         onDrop={props.onDrop}
         onPause={props.onPause}
         onUnpause={props.onUnpause}
@@ -47,7 +45,8 @@ export const ActiveTimer = (props: Props) => {
     <Pure
       isPaused={props.isPaused}
       completedTime={props.entry.completedTime}
-      onComplete={props.onComplete}
+      onCompletePureTime={props.onCompletePureTime}
+      onDrop={props.onDrop}
       onPause={props.onPause}
       onUnpause={props.onUnpause}
     />

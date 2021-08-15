@@ -1,9 +1,11 @@
-import { combine, createEvent, createStore, guard } from 'effector';
+import { combine, createEvent, createStore } from 'effector';
 import React, { useEffect } from 'react';
 
 import { TodayStats } from '../../Features/Stats/components/TodayStats';
 
 import { Timer } from '../../Features/Timer/components/Timer';
+import { seconds } from '../../Features/utils';
+import { tick } from '../../store';
 import { $currentEntry, entryEvents } from '../../store/currentEntry';
 import { $stats, statsEvents } from '../../store/stats';
 import { $timerState, timerEvents, TimerState } from '../../store/timer';
@@ -17,12 +19,7 @@ combine([$currentEntry, $stats, $timerState, $syncer]).watch(([entry, stats, tim
   if (!syncer) {
     return;
   }
-  console.log('🚀 ~ file: index.tsx ~ line 18 ~ combine ~ [entry, stats, timer, syncer]', [
-    entry,
-    stats,
-    timer,
-    syncer,
-  ]);
+
   localStorage.setItem(
     'pomodoro',
     JSON.stringify({
@@ -36,10 +33,8 @@ combine([$currentEntry, $stats, $timerState, $syncer]).watch(([entry, stats, tim
 export const Main = () => {
   useEffect(() => {
     const possibleItem = localStorage.getItem('pomodoro');
-    console.log('🚀 ~ file: index.tsx ~ line 28 ~ useEffect ~ Item', possibleItem);
 
     if (!possibleItem) {
-      console.log('noItem');
       return;
     }
     const { entry, stats, timer } = JSON.parse(possibleItem);
@@ -47,6 +42,12 @@ export const Main = () => {
     statsEvents.init(stats);
     entryEvents.setEntry(entry);
     synced();
+  }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      tick(seconds(1));
+    }, seconds(1));
+    return () => clearInterval(interval);
   }, []);
   return (
     <div className={styles.layout}>

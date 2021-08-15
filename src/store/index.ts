@@ -1,4 +1,4 @@
-import { forward, sample } from 'effector';
+import { forward, guard, sample } from 'effector';
 
 import { dingAlert } from '../Features/Timer/dingAlert';
 import { TimeEntry } from '../Features/Timer/types';
@@ -6,16 +6,18 @@ import { TimeEntryType } from '../Features/types';
 import { entryEvents, $currentEntry } from './currentEntry';
 import { domain } from './domain';
 import { statsEvents } from './stats';
-import { timerEvents } from './timer';
+import { $timerState, timerEvents, TimerState } from './timer';
 
 export const startPomodoro = domain.createEvent<number>();
 export const startResting = domain.createEvent<number>();
 export const startPureTime = domain.createEvent();
-export const pauseTimer = domain.createEvent<number>();
+export const pauseTimer = domain.createEvent();
 export const unpauseTimer = domain.createEvent();
 export const drop = domain.createEvent();
-export const complete = domain.createEvent<number | undefined>();
+export const completePureTime = domain.createEvent();
 export const toIdle = domain.createEvent();
+export const tick = domain.createEvent<number>();
+const complete = domain.createEvent<TimeEntry>();
 
 const createTimeEntry =
   (type: TimeEntryType) =>
@@ -35,9 +37,42 @@ forward({
   to: [entryEvents.setEntry, timerEvents.start as any],
 });
 
+const activeTick = sample({
+  source: $timerState,
+  clock: tick,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  fn: (state, tick): number => {
+    if (state === TimerState.Active) {
+      return tick;
+    }
+    return 0;
+  },
+});
+
+forward({
+  from: activeTick,
+  to: entryEvents.addCompletedTime,
+});
+
+guard({
+  clock: $currentEntry,
+  filter: (entry) => {
+    if (!entry) {
+      return false;
+    }
+    if (entry.completedTime === entry.size) {
+      return true;
+    }
+
+    return false;
+  },
+  // @ts-ignore
+  target: complete,
+});
+
 forward({
   from: pauseTimer,
-  to: [entryEvents.addCompletedTime, timerEvents.pause as any],
+  to: [timerEvents.pause],
 });
 
 forward({
@@ -50,27 +85,25 @@ forward({
   to: [timerEvents.idle, entryEvents.flush],
 });
 
-forward({
-  from: sample({
-    source: $currentEntry,
-    clock: complete,
-    fn: (entry, completedTime) => {
-      if (!entry) {
-        throw new Error('Ожидали что entry будет');
-      }
-      const resultCompletedTime =
-        entry.type === TimeEntryType.Time ? entry.completedTime + completedTime! : entry.size;
+sample({
+  source: $currentEntry,
+  clock: completePureTime,
+  // @ts-ignore
+  target: complete,
+});
+const completedEntry = complete.map((entry) => ({
+  type: entry.type,
+  size: entry.size,
+  startTime: entry.startTime,
+  completedTime: entry.completedTime,
+  endTime: Date.now(),
+}));
 
-      return {
-        type: entry.type,
-        size: entry.size,
-        startTime: entry?.startTime,
-        completedTime: resultCompletedTime!,
-        endTime: Date.now(),
-      };
-    },
-  }) as any,
-  to: [statsEvents.addEntry as any, timerEvents.suggestResting, entryEvents.flush],
+forward({ from: completedEntry, to: statsEvents.addEntry });
+
+forward({
+  from: complete,
+  to: [timerEvents.suggestResting, entryEvents.flush],
 });
 
 complete.watch(dingAlert);

@@ -4,7 +4,7 @@ import {
   startResting,
   unpauseTimer,
   pauseTimer,
-  complete,
+  completePureTime,
   startPomodoro,
   startPureTime,
   toIdle,
@@ -23,8 +23,8 @@ import { SuggestResting } from './SuggestResting';
 
 type Props = {
   onDrop: () => any;
-  onComplete: (completedTime?: number) => any;
-  onPause: (completedTime: number) => any;
+  onCompletePureTime: () => any;
+  onPause: () => any;
   onUnpause: () => any;
   onRest: () => any;
   onStartPomodoro: (time: number) => any;
@@ -50,7 +50,7 @@ export const TimerPure = (props: Props) => {
       entry={props.entry}
       isPaused={props.state === TimerState.Paused}
       onDrop={props.onDrop}
-      onComplete={props.onComplete}
+      onCompletePureTime={props.onCompletePureTime}
       onPause={props.onPause}
       onUnpause={props.onUnpause}
     />
@@ -69,7 +69,7 @@ export const Timer = () => {
       state={timerState}
       entry={entry || undefined}
       onDrop={drop}
-      onComplete={complete}
+      onCompletePureTime={completePureTime}
       onPause={pauseTimer}
       onUnpause={unpauseTimer}
       onRest={onRest}

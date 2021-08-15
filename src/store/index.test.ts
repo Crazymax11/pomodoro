@@ -1,6 +1,6 @@
 import { allSettled, fork } from 'effector';
 import {
-  complete,
+  completePureTime,
   drop,
   pauseTimer,
   startPureTime,
@@ -8,6 +8,7 @@ import {
   toIdle,
   unpauseTimer,
   startPomodoro,
+  tick,
 } from './index';
 
 import { $currentEntry } from './currentEntry';
@@ -42,7 +43,8 @@ describe('pomodoro state', () => {
     const scope = fork(domain);
 
     await allSettled(startPomodoro, { scope, params: seconds(5) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Paused);
     expect(scope.getState($currentEntry)?.type).toEqual(TimeEntryType.Pomodoro);
@@ -62,7 +64,8 @@ describe('pomodoro state', () => {
   it('При сбросе помидорки после паузы должно должен быть Idle', async () => {
     const scope = fork(domain);
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
     await allSettled(drop, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Idle);
@@ -73,7 +76,8 @@ describe('pomodoro state', () => {
   it('Если анпаузнуть помидорку то она активна', async () => {
     const scope = fork(domain);
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
     await allSettled(unpauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Active);
@@ -84,7 +88,7 @@ describe('pomodoro state', () => {
   it('Если завершить помидорку, то должно быть предложено отдохнуть', async () => {
     const scope = fork(domain);
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(25) });
 
     expect(scope.getState($timerState)).toEqual(TimerState.SuggestResting);
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
@@ -95,7 +99,7 @@ describe('pomodoro state', () => {
   it('Если предложено отдохнуть, можно отказаться', async () => {
     const scope = fork(domain);
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(25) });
     await allSettled(toIdle, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Idle);
@@ -113,7 +117,8 @@ describe('pomodoro state', () => {
   it('Можно запаузить отдых', async () => {
     const scope = fork(domain);
     await allSettled(startResting, { scope, params: minutes(5) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Paused);
     expect(scope.getState($currentEntry)?.type).toEqual(TimeEntryType.Rest);
@@ -122,7 +127,8 @@ describe('pomodoro state', () => {
   it('Можно восстановить отдых', async () => {
     const scope = fork(domain);
     await allSettled(startResting, { scope, params: minutes(5) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
     await allSettled(unpauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Active);
@@ -142,7 +148,7 @@ describe('pomodoro state', () => {
   it('Можно завершить отдых', async () => {
     const scope = fork(domain);
     await allSettled(startResting, { scope, params: minutes(5) });
-    await allSettled(complete, { scope, params: minutes(5) });
+    await allSettled(tick, { scope, params: minutes(5) });
 
     expect(scope.getState($timerState)).toEqual(TimerState.SuggestResting);
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
@@ -159,7 +165,8 @@ describe('pomodoro state', () => {
   it('Можно паузить отрезок времени', async () => {
     const scope = fork(domain);
     await allSettled(startPureTime, { scope });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Paused);
     expect(scope.getState($currentEntry)?.type).toEqual(TimeEntryType.Time);
@@ -167,7 +174,8 @@ describe('pomodoro state', () => {
   it('Можно восстановить отрезок времени', async () => {
     const scope = fork(domain);
     await allSettled(startPureTime, { scope });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: seconds(1) });
+    await allSettled(pauseTimer, { scope });
     await allSettled(unpauseTimer, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.Active);
@@ -185,28 +193,31 @@ describe('pomodoro state', () => {
   it('Можно завершить отрезок времени', async () => {
     const scope = fork(domain);
     await allSettled(startPureTime, { scope });
-    await allSettled(complete, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: minutes(5) });
+    await allSettled(completePureTime, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.SuggestResting);
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
     expect(scope.getState($stats).entries[0].type).toEqual(TimeEntryType.Time);
-    expect(scope.getState($stats).entries[0].completedTime).toEqual(seconds(1));
+    expect(scope.getState($stats).entries[0].completedTime).toEqual(minutes(5));
   });
 
   it('Если завершить 2 помидорки, 2 отрезка времени и 1 отдых то стата верная', async () => {
     const scope = fork(domain);
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(25) });
     await allSettled(startResting, { scope, params: minutes(5) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(5) });
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(25) });
     await allSettled(startResting, { scope, params: minutes(5) });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(5) });
     await allSettled(startPureTime, { scope });
-    await allSettled(complete, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: minutes(5) });
+    await allSettled(completePureTime, { scope });
     await allSettled(startPureTime, { scope });
-    await allSettled(complete, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: minutes(5) });
+    await allSettled(completePureTime, { scope });
 
     expect(scope.getState($timerState)).toEqual(TimerState.SuggestResting);
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
@@ -217,9 +228,10 @@ describe('pomodoro state', () => {
     const scope = fork(domain);
 
     await allSettled(startPomodoro, { scope, params: minutes(25) });
-    await allSettled(pauseTimer, { scope, params: seconds(1) });
+    await allSettled(tick, { scope, params: minutes(20) });
+    await allSettled(pauseTimer, { scope });
     await allSettled(unpauseTimer, { scope });
-    await allSettled(complete as any, { scope });
+    await allSettled(tick, { scope, params: minutes(5) });
 
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
     expect(scope.getState($stats).entries[0].completedTime).toEqual(minutes(25));

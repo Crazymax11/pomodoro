@@ -1,9 +1,9 @@
 import classnames from 'classnames';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { TimeEntryType } from '../../../../../types';
 
-import { formatToReadableTime, seconds } from '../../../../../utils';
-import { useTimer } from '../../useTimer';
+import { formatToReadableTime } from '../../../../../utils';
+
 import styles from './index.module.css';
 
 type Props = {
@@ -11,9 +11,9 @@ type Props = {
   isPaused: boolean;
   size: number;
   completedTime: number;
-  onPause: (completedTime: number) => any;
-  onDrop: (completedTime: number) => any;
-  onComplete: () => any;
+  onPause: () => any;
+  onDrop: () => any;
+
   onUnpause: () => any;
 };
 
@@ -24,29 +24,18 @@ export const BasePomodoroTimer = ({
   completedTime,
   onDrop,
   onPause,
-  onComplete,
+
   onUnpause,
 }: Props) => {
-  const { time, flush } = useTimer(isPaused);
   const onPauseBtnClick = useCallback(() => {
     if (isPaused) {
       onUnpause();
     } else {
-      onPause(seconds(time));
-      flush();
+      onPause();
     }
-  }, [isPaused, flush, onPause, onUnpause, time]);
-  const onDropBtnClick = useCallback(() => {
-    onDrop(seconds(time));
-  }, [time, onDrop]);
+  }, [isPaused, onPause, onUnpause]);
 
-  const restingTime = size - completedTime - seconds(time);
-
-  useEffect(() => {
-    if (restingTime <= 0) {
-      onComplete();
-    }
-  }, [restingTime, onComplete]);
+  const restingTime = size - completedTime;
 
   return (
     <div className={styles.wrapper}>
@@ -61,7 +50,7 @@ export const BasePomodoroTimer = ({
       <span className={styles.pauseButton} onClick={onPauseBtnClick}>
         {isPaused ? '▶️' : '⏸️'}
       </span>
-      <span className={styles.pauseButton} onClick={onDropBtnClick}>
+      <span className={styles.pauseButton} onClick={onDrop}>
         🚫
       </span>
     </div>

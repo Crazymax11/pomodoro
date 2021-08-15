@@ -1,40 +1,44 @@
 import React, { useCallback } from 'react';
-import { formatToReadableTime, seconds } from '../../../../../utils';
-import { useTimer } from '../../useTimer';
+import { formatToReadableTime } from '../../../../../utils';
 import styles from './index.module.css';
 
 type Props = {
   isPaused: boolean;
-  onPause: (completedTime: number) => any;
+  onPause: () => any;
   onUnpause: () => any;
   completedTime: number;
-  onComplete: (completedTime: number) => any;
+  onCompletePureTime: () => any;
+  onDrop: () => any;
 };
 
-export const Pure = ({ completedTime = 0, isPaused, onUnpause, onComplete, onPause }: Props) => {
-  const { time, flush } = useTimer(isPaused);
-
+export const Pure = ({
+  completedTime = 0,
+  isPaused,
+  onUnpause,
+  onCompletePureTime,
+  onPause,
+  onDrop,
+}: Props) => {
   const onPauseBtnClick = useCallback(() => {
     if (isPaused) {
       onUnpause();
     } else {
-      onPause(seconds(time));
-      flush();
+      onPause();
     }
-  }, [isPaused, onUnpause, onPause, time, flush]);
-  const onCompleteBtnClick = useCallback(() => {
-    onComplete(seconds(time));
-  }, [onComplete, time]);
+  }, [isPaused, onUnpause, onPause]);
 
-  const workingTime = completedTime + seconds(time);
+  const workingTime = completedTime;
   return (
     <div className={styles.wrapper}>
       <div className={styles.timer}> {formatToReadableTime(workingTime)}</div>
       <span className={styles.pauseButton} onClick={onPauseBtnClick}>
-        ▶️
+        {isPaused ? '▶️' : '⏸️'}
       </span>
 
-      <span className={styles.pauseButton} onClick={onCompleteBtnClick}>
+      <span className={styles.pauseButton} onClick={onCompletePureTime}>
+        ✔️
+      </span>
+      <span className={styles.pauseButton} onClick={onDrop}>
         🚫
       </span>
     </div>

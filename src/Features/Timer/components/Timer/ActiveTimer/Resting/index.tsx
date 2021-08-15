@@ -7,10 +7,9 @@ type Props = {
   isPaused: boolean;
   size: number;
   completedTime: number;
-  onPause: (completedTime: number) => any;
+  onPause: () => any;
   onUnpause: () => any;
-  onDrop: (completedTime: number) => any;
-  onComplete: () => any;
+  onDrop: () => any;
 };
 
 export const Resting = (props: Props) => {
