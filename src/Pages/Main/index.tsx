@@ -55,6 +55,12 @@ export const Main = () => {
         [TimeEntryType.Time]: '/favicons/time.ico',
       };
 
+      const entryTypeEmojis: Record<TimeEntryType, string> = {
+        [TimeEntryType.Pomodoro]: '🍅',
+        [TimeEntryType.Rest]: '🏖️',
+        [TimeEntryType.Time]: '⏳',
+      };
+
       if (!entry) {
         document.title = 'Pomodoro Timer';
         // @ts-ignore
@@ -67,7 +73,8 @@ export const Main = () => {
           ? formatToReadableTime(entry.completedTime)
           : formatToReadableTime(entry!.size! - entry.completedTime);
 
-      document.title = time;
+      document.title = `${entryTypeEmojis[entry.type]} ${time}`;
+
       // @ts-ignore
       link.href = entryTypeIcons[entry.type];
     });
