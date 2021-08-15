@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { minutes, seconds } from '../../../../utils';
+import { minutes } from '../../../../utils';
 import styles from './index.module.css';
 
 type Props = {
@@ -27,7 +27,7 @@ export const Idle = ({ onStartPomodoro, onStartPureTime }: Props) => {
   const pomodoroButtons = useMemo(
     () =>
       sizes.map((size) => (
-        <PomodoroButton key={size} size={size} onStart={() => onStartPomodoro(seconds(size))} />
+        <PomodoroButton key={size} size={size} onStart={() => onStartPomodoro(minutes(size))} />
       )),
     [onStartPomodoro],
   );
