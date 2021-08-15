@@ -23,7 +23,28 @@ export const TodayStatsPure = (props: Props) => {
 
 export const TodayStats = () => {
   const { totalTime, pomodorosCount } = useStoreMap($stats, (state) => ({
-    totalTime: state.entries.reduce((acc, entry) => acc + entry.completedTime, 0),
+    totalTime: state.entries
+      .filter((entry) => {
+        const entryStartTime = new Date(entry.startTime);
+        const entryDateTime = {
+          day: entryStartTime.getDate(),
+          month: entryStartTime.getMonth(),
+          year: entryStartTime.getFullYear(),
+        };
+
+        const nowDateTime = {
+          day: new Date().getDate(),
+          month: new Date().getMonth(),
+          year: new Date().getFullYear(),
+        };
+
+        return (
+          entryDateTime.day === nowDateTime.day &&
+          entryDateTime.month === nowDateTime.month &&
+          entryDateTime.year === nowDateTime.year
+        );
+      })
+      .reduce((acc, entry) => acc + entry.completedTime, 0),
     pomodorosCount: state.entries.filter((entry) => entry.type === TimeEntryType.Pomodoro).length,
   }));
 
