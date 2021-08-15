@@ -8,4 +8,5 @@ RUN npm ci
 RUN npm run build
 
 FROM redsadic/docker-http-server
-COPY --from=builder /dist /public /public
+COPY --from=builder /dist /public
+COPY --from=builder /public /public/public
