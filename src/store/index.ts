@@ -1,6 +1,6 @@
 import { forward, guard, sample } from 'effector';
+import { sounder } from '../Features/Timer/sounder';
 
-import { dingAlert } from '../Features/Timer/dingAlert';
 import { TimeEntry } from '../Features/Timer/types';
 import { TimeEntryType } from '../Features/types';
 import { entryEvents, $currentEntry } from './currentEntry';
@@ -106,6 +106,14 @@ forward({
   to: [timerEvents.suggestResting, entryEvents.flush],
 });
 
-complete.watch(dingAlert);
+complete.watch(sounder.ding);
+
+const realActiveTick = domain.createEvent();
+guard({
+  source: activeTick,
+  filter: (tick) => !!tick,
+  target: realActiveTick,
+});
+realActiveTick.watch(sounder.tick);
 
 forward({ from: toIdle, to: timerEvents.idle });

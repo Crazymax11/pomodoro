@@ -21,7 +21,7 @@ import { TimeEntryType } from '../Features/types';
 
 import { domain } from './domain';
 
-jest.mock('../Features/Timer/dingAlert');
+jest.mock('../Features/Timer/sounder');
 
 describe('pomodoro state', () => {
   it('должен вернуть Idle стейт в самом начале', () => {
