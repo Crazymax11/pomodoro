@@ -46,24 +46,27 @@ export const Main = () => {
     synced();
   }, []);
   useEffect(() => {
+    const link = document.querySelector("link[rel~='icon']")!;
     $currentEntry.watch((entry) => {
+      const entryTypeIcons: Record<TimeEntryType, string> = {
+        [TimeEntryType.Pomodoro]: '/favicons/pomodoro.ico',
+        [TimeEntryType.Rest]: '/favicons/rest.ico',
+        [TimeEntryType.Time]: '/favicons/time.ico',
+      };
+
       if (!entry) {
         document.title = 'Pomodoro Timer';
+        link.href = entryTypeIcons[TimeEntryType.Pomodoro];
         return;
       }
-
-      const entryTypeIcons: Record<TimeEntryType, string> = {
-        [TimeEntryType.Pomodoro]: '🍅',
-        [TimeEntryType.Rest]: '🏖️',
-        [TimeEntryType.Time]: '⏳',
-      };
 
       const time =
         entry.type === TimeEntryType.Time
           ? formatToReadableTime(entry.completedTime)
           : formatToReadableTime(entry!.size! - entry.completedTime);
 
-      document.title = `${entryTypeIcons[entry.type]} ${time}`;
+      document.title = time;
+      link.href = entryTypeIcons[entry.type];
     });
   }, []);
   useEffect(() => {
@@ -72,6 +75,7 @@ export const Main = () => {
     }, seconds(1));
     return () => clearInterval(interval);
   }, []);
+
   return (
     <div className={styles.layout}>
       <TodayStats />
