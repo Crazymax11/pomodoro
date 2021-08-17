@@ -15,7 +15,6 @@ type Props = {
 export const TodayStatsPure = (props: Props) => {
   return (
     <div className={styles.wrapper}>
-      <div>За сегодня</div>
       <div>🍅 {props.pomodorosCount} </div>
       <div>🕰️ {formatToReadableTime(props.totalTime)} </div>
     </div>

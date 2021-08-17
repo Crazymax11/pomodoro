@@ -88,12 +88,15 @@ export const Main = () => {
 
   return (
     <div className={styles.layout}>
-      <div
-        style={{ marginBottom: 12, display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-      >
-        <TodayStats />
-        <div style={{ flexGrow: 1 }}>
-          <TodayChart />
+      <div>
+        <h3>Стата за сегодня</h3>
+        <div
+          style={{ marginBottom: 12, display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+        >
+          <TodayStats />
+          <div style={{ flexGrow: 1 }}>
+            <TodayChart />
+          </div>
         </div>
       </div>
 
