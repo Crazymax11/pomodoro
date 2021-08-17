@@ -24,7 +24,9 @@ export const TodayStatsPure = (props: Props) => {
 export const TodayStats = () => {
   const { totalTime, pomodorosCount } = useStoreMap($stats, (state) => ({
     totalTime: state.entries.filter(isToday).reduce((acc, entry) => acc + entry.completedTime, 0),
-    pomodorosCount: state.entries.filter((entry) => entry.type === TimeEntryType.Pomodoro).length,
+    pomodorosCount: state.entries
+      .filter(isToday)
+      .filter((entry) => entry.type === TimeEntryType.Pomodoro).length,
   }));
 
   return <TodayStatsPure totalTime={totalTime} pomodorosCount={pomodorosCount} />;
