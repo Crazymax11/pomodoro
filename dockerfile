@@ -2,7 +2,7 @@ FROM node:12 as builder
 
 COPY src /src
 COPY public /public
-COPY index.html package.json package-lock.json vite.config.ts tsconfig.json /
+COPY index.html package.json yarn.lock vite.config.ts tsconfig.json /
 
 RUN yarn
 RUN yarn build
