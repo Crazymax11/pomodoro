@@ -41,7 +41,6 @@ const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; positi
         width: `${props.size}%`,
         marginLeft: `${props.position}%`,
         height: 20,
-        // backgroundColor: colors[props.type],
         position: 'absolute',
       }}
     >
