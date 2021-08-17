@@ -1,5 +1,6 @@
 import { useStore } from 'effector-react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import rough from 'roughjs';
 import { $stats, TimeEntry } from '../../../../store/stats';
 import { TimeEntryType } from '../../../types';
 import { minutes } from '../../../utils';
@@ -10,19 +11,44 @@ const colors: Record<TimeEntryType, string> = {
   [TimeEntryType.Rest]: 'green',
   [TimeEntryType.Time]: 'blue',
 };
-const TimeBlock = (props: { type: TimeEntryType; size: number; position: number }) => {
+
+const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; position: number }) => {
+  const svgRef = useRef<SVGSVGElement>();
+  const divRef = useRef<HTMLDivElement>();
+  useEffect(() => {
+    if (!svgRef.current || !divRef.current) {
+      return;
+    }
+    if (svgRef.current.childNodes[0]) {
+      svgRef.current.removeChild(svgRef.current.childNodes[0]);
+    }
+
+    const { offsetWidth, offsetHeight } = divRef.current;
+    const rc = rough.svg(svgRef.current);
+    const node = rc.rectangle(0, 0, offsetWidth, offsetHeight, {
+      fill: colors[props.type],
+      fillStyle: 'hachure',
+      hachureGap: 2,
+    });
+
+    svgRef.current.appendChild(node);
+  });
+
   return (
     <div
+      ref={divRef}
       style={{
         width: `${props.size}%`,
         marginLeft: `${props.position}%`,
         height: 20,
-        backgroundColor: colors[props.type],
+        // backgroundColor: colors[props.type],
         position: 'absolute',
       }}
-    />
+    >
+      <svg style={{ width: '100%', height: '100%' }} ref={svgRef} />
+    </div>
   );
-};
+});
 
 const HourLine = (props: { position: number; hour: number }) => {
   return (
