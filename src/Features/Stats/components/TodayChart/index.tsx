@@ -13,8 +13,8 @@ const colors: Record<TimeEntryType, string> = {
 };
 
 const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; position: number }) => {
-  const svgRef = useRef<SVGSVGElement>();
-  const divRef = useRef<HTMLDivElement>();
+  const svgRef = useRef<SVGSVGElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!svgRef.current || !divRef.current) {
       return;
