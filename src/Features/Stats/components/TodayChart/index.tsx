@@ -6,10 +6,10 @@ import { TimeEntryType } from '../../../types';
 import { minutes } from '../../../utils';
 import { isToday } from '../isToday';
 
-const colors: Record<TimeEntryType, string> = {
-  [TimeEntryType.Pomodoro]: 'tomato',
-  [TimeEntryType.Rest]: 'green',
-  [TimeEntryType.Time]: 'deepskyblue',
+const colors: Record<TimeEntryType, { color: string; border: string }> = {
+  [TimeEntryType.Pomodoro]: { color: 'tomato', border: 'tomato' },
+  [TimeEntryType.Rest]: { color: 'green', border: 'green' },
+  [TimeEntryType.Time]: { color: 'deepskyblue', border: 'deepskyblue' },
 };
 
 const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; position: number }) => {
@@ -26,7 +26,8 @@ const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; positi
     const { offsetWidth, offsetHeight } = divRef.current;
     const rc = rough.svg(svgRef.current);
     const node = rc.rectangle(0, 0, offsetWidth, offsetHeight, {
-      fill: colors[props.type],
+      fill: colors[props.type].color,
+      stroke: colors[props.type].border,
       fillStyle: 'hachure',
       hachureGap: 2,
     });
@@ -40,7 +41,7 @@ const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; positi
       style={{
         width: `${props.size}%`,
         marginLeft: `${props.position}%`,
-        height: 20,
+        height: 40,
         position: 'absolute',
       }}
     >
@@ -55,11 +56,11 @@ const HourLine = (props: { position: number; hour: number }) => {
       style={{
         position: 'absolute',
         left: `${props.position}%`,
-        height: 40,
+        height: 60,
         borderLeft: 'solid grey 1px',
       }}
     >
-      <div style={{ marginTop: 20 }}>{props.hour}:00</div>
+      <div style={{ marginTop: 40 }}>{props.hour}:00</div>
     </div>
   );
 };
