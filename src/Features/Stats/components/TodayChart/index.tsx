@@ -9,7 +9,7 @@ import { isToday } from '../isToday';
 const colors: Record<TimeEntryType, string> = {
   [TimeEntryType.Pomodoro]: 'tomato',
   [TimeEntryType.Rest]: 'green',
-  [TimeEntryType.Time]: 'blue',
+  [TimeEntryType.Time]: 'deepskyblue',
 };
 
 const TimeBlock = React.memo((props: { type: TimeEntryType; size: number; position: number }) => {
