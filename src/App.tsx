@@ -1,12 +1,18 @@
+import classNames from 'classnames';
 import React from 'react';
 
-import './App.css';
+import styles from './App.module.css';
 import { Main } from './Pages/Main';
+import { ChoosableThemeRrovider } from './Theme/ThemeProvider';
+import { ThemeToggle } from './Theme/ThemeToggle';
 
 export function App() {
   return (
-    <div className="App">
-      <Main />
-    </div>
+    <ChoosableThemeRrovider>
+      <div className={classNames(styles.App)}>
+        <ThemeToggle />
+        <Main />
+      </div>
+    </ChoosableThemeRrovider>
   );
 }
