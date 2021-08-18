@@ -150,7 +150,7 @@ describe('pomodoro state', () => {
     await allSettled(startResting, { scope, params: minutes(5) });
     await allSettled(tick, { scope, params: minutes(5) });
 
-    expect(scope.getState($timerState)).toEqual(TimerState.SuggestResting);
+    expect(scope.getState($timerState)).toEqual(TimerState.Idle);
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
     expect(scope.getState($stats).entries[0].type).toEqual(TimeEntryType.Rest);
   });

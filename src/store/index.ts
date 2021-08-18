@@ -103,7 +103,19 @@ forward({ from: completedEntry, to: statsEvents.addEntry });
 
 forward({
   from: complete,
-  to: [timerEvents.suggestResting, entryEvents.flush],
+  to: [entryEvents.flush],
+});
+
+guard({
+  source: complete,
+  filter: (entry) => entry.type === TimeEntryType.Rest,
+  target: timerEvents.idle,
+});
+
+guard({
+  source: complete,
+  filter: (entry) => entry.type !== TimeEntryType.Rest,
+  target: timerEvents.suggestResting,
 });
 
 complete.watch(sounder.ding);
