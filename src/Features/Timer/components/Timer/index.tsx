@@ -39,7 +39,13 @@ export const TimerPure = (props: Props) => {
   }
 
   if (props.state === TimerState.SuggestResting) {
-    return <SuggestResting onRest={props.onRest} onIdle={props.onIdle} onPomodoro={props.onIdle} />;
+    return (
+      <SuggestResting
+        onRest={props.onRest}
+        onContinue={props.onStartPureTime}
+        onPomodoro={props.onIdle}
+      />
+    );
   }
   if (!props.entry) {
     return null;

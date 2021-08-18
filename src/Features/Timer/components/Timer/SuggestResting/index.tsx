@@ -5,7 +5,7 @@ import styles from './index.module.css';
 type Props = {
   onRest: () => any;
   onPomodoro: () => any;
-  onIdle: () => any;
+  onContinue: () => any;
 };
 export const SuggestResting = (props: Props) => {
   return (
@@ -20,9 +20,8 @@ export const SuggestResting = (props: Props) => {
           🍅
           <div className={classNames(styles.buttonText)}>Начать помидорку</div>
         </div>
-        <div className={classNames(styles.button)} onClick={props.onIdle}>
-          🤷
-          <div className={classNames(styles.buttonText)}>Да хз</div>
+        <div className={classNames(styles.button)} onClick={props.onContinue}>
+          ⏳<div className={classNames(styles.buttonText)}>Продолжить</div>
         </div>
       </div>
     </div>
