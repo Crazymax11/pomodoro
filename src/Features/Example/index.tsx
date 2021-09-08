@@ -9,5 +9,5 @@ export const Example = () =>{
 
 
 
-const getItemStatus = (item) => item.status
+const getOrderStatus = (order) => order.status
 
