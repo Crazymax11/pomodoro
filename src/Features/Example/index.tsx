@@ -9,5 +9,5 @@ export const Example = () =>{
 
 
 
-const getStatus = () => true
+const getItemStatus = (item) => item.status
 
