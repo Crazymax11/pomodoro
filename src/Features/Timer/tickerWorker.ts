@@ -13,3 +13,4 @@ onmessage = (event: MessageEvent<any>) => {
     clearInterval(interval);
   }
 };
+export {};
