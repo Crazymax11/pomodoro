@@ -1,6 +1,7 @@
 module.exports = {
-  moduleFileExtensions: ["js", "ts", "json"],
+  moduleFileExtensions: ['js', 'ts', 'json'],
   transform: {
-    "^.+\\.ts$": "babel-jest",
+    '^.+\\.ts$': 'babel-jest',
   },
+  coverageDirectory: './coverage/',
 };

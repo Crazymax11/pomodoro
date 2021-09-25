@@ -1,6 +1,14 @@
 name: Publish Docker
 on: [push]
 jobs:
+  test:
+    steps:
+      - uses: actions/checkout@master
+      - name: Run tests
+        run: |
+          yarn && yarn test:ci
+      - uses: codecov/codecov-action@v2
+
   deploy:
     runs-on: ubuntu-latest
     steps:
