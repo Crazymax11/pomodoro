@@ -7,6 +7,7 @@ import {
   $isAlertSoundEnabled,
   settingsEvents,
   $preferedTheme,
+  Theme,
 } from '../../store/settings';
 import { ThemeTogglePure } from '../../Theme/ThemeToggle';
 
