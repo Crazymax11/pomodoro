@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect } from 'react';
-import { Theme, ThemeContext } from './ThemeContext';
+import { Theme } from '../store/settings';
+import { ThemeContext } from './ThemeContext';
 import styles from './ThemeInjector.module.css';
 
 export const ThemeInjector: React.FC<{ theme: Theme }> = ({ theme, children }) => {

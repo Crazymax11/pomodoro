@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChoosableThemeRrovider } from '../src/Theme/ThemeProvider';
+import { StorybookThemeProvider } from '../src/Theme/ThemeProvider';
 import { ThemeToggle } from '../src/Theme/ThemeToggle';
 import { useGlobalInjector } from '../src/Theme/ThemeInjector';
 export const parameters = {
@@ -25,9 +25,9 @@ export const decorators = [
   },
   (Story) => {
     return (
-      <ChoosableThemeRrovider>
+      <StorybookThemeProvider>
         <Story />
-      </ChoosableThemeRrovider>
+      </StorybookThemeProvider>
     );
   },
 ];

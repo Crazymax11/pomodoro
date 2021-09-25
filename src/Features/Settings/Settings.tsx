@@ -6,7 +6,9 @@ import {
   $isTickSoundEnabled,
   $isAlertSoundEnabled,
   settingsEvents,
+  $preferedTheme,
 } from '../../store/settings';
+import { ThemeTogglePure } from '../../Theme/ThemeToggle';
 
 type Props = {
   tickVolume: number;
@@ -17,6 +19,8 @@ type Props = {
   onAlertVolumeChange: (newValue: number) => void;
   onToggleTickSound: () => void;
   onToggleAlertSound: () => void;
+  currentTheme: Theme;
+  setTheme: (theme: Theme) => void;
 };
 
 export const SettingsPure: React.FC<Props> = ({
@@ -28,10 +32,13 @@ export const SettingsPure: React.FC<Props> = ({
   onToggleAlertSound,
   isAlertSoundEnabled,
   onAlertVolumeChange,
+  currentTheme,
+  setTheme,
 }) => {
   return (
     <div>
       <div>Настройки</div>
+      <ThemeTogglePure setTheme={setTheme} currentTheme={currentTheme} />
       <div>
         <label> Тикание</label>
         <input
@@ -83,6 +90,7 @@ export const Settings = () => {
   const alertVolume = useStore($alertVolume);
   const isTickSoundEnabled = useStore($isTickSoundEnabled);
   const isAlertSoundEnabled = useStore($isAlertSoundEnabled);
+  const currentTheme = useStore($preferedTheme);
 
   return (
     <SettingsPure
@@ -94,6 +102,8 @@ export const Settings = () => {
       onTickVolumeChange={settingsEvents.setTickVolume}
       onToggleAlertSound={settingsEvents.toggleAlertSound}
       onToggleTickSound={settingsEvents.toggleTickSound}
+      setTheme={settingsEvents.setPreferedTheme}
+      currentTheme={currentTheme}
     />
   );
 };

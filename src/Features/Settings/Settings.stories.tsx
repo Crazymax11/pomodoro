@@ -2,6 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { SettingsPure } from './Settings';
+import { Theme } from '../../store/settings';
 
 export default {
   title: 'Settings',
@@ -15,6 +16,7 @@ Overview.args = {
   tickVolume: 0.2,
   alertVolume: 0.2,
   isAlertSoundEnabled: false,
+  currentTheme: Theme.Dark,
 };
 
 export const AllDisabled = Template.bind({});
@@ -23,6 +25,7 @@ AllDisabled.args = {
   alertVolume: 0.2,
   isAlertSoundEnabled: false,
   isTickSoundEnabled: false,
+  currentTheme: Theme.Dark,
 };
 
 export const All05 = Template.bind({});
@@ -31,6 +34,7 @@ All05.args = {
   alertVolume: 0.5,
   isAlertSoundEnabled: true,
   isTickSoundEnabled: true,
+  currentTheme: Theme.Dark,
 };
 
 export const FullValue = Template.bind({});
@@ -39,6 +43,7 @@ FullValue.args = {
   alertVolume: 1,
   isAlertSoundEnabled: true,
   isTickSoundEnabled: true,
+  currentTheme: Theme.Dark,
 };
 
 export const Mute = Template.bind({});
@@ -47,4 +52,5 @@ Mute.args = {
   alertVolume: 0,
   isAlertSoundEnabled: true,
   isTickSoundEnabled: true,
+  currentTheme: Theme.Dark,
 };

@@ -1,9 +1,5 @@
 import React from 'react';
-
-export enum Theme {
-  Dark = 'dark',
-  Light = 'light',
-}
+import { Theme } from '../store/settings';
 
 export type ThemeContextValue = {
   currentTheme: Theme;
