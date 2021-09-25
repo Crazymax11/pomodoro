@@ -10,6 +10,7 @@ import { TimeEntryType } from '../../Features/types';
 import { formatToReadableTime, seconds } from '../../Features/utils';
 import { tick } from '../../store';
 import { $currentEntry, entryEvents } from '../../store/currentEntry';
+import { $settings, settingsEvents } from '../../store/settings';
 import { $stats, statsEvents } from '../../store/stats';
 import { $timerState, timerEvents, TimerState } from '../../store/timer';
 
@@ -18,20 +19,23 @@ import styles from './index.module.css';
 const synced = createEvent();
 const $syncer = createStore(false).on(synced, () => true);
 
-combine([$currentEntry, $stats, $timerState, $syncer]).watch(([entry, stats, timer, syncer]) => {
-  if (!syncer) {
-    return;
-  }
+combine([$currentEntry, $stats, $timerState, $syncer, $settings]).watch(
+  ([entry, stats, timer, syncer, settings]) => {
+    if (!syncer) {
+      return;
+    }
 
-  localStorage.setItem(
-    'pomodoro',
-    JSON.stringify({
-      entry,
-      stats,
-      timer: timer === TimerState.Active ? TimerState.Paused : timer,
-    }),
-  );
-});
+    localStorage.setItem(
+      'pomodoro',
+      JSON.stringify({
+        entry,
+        stats,
+        timer: timer === TimerState.Active ? TimerState.Paused : timer,
+        settings,
+      }),
+    );
+  },
+);
 
 export const Main = () => {
   useEffect(() => {
@@ -41,9 +45,12 @@ export const Main = () => {
       synced();
       return;
     }
-    const { entry, stats, timer } = JSON.parse(possibleItem);
+    const { entry, stats, timer, settings } = JSON.parse(possibleItem);
     timerEvents.init(timer);
     statsEvents.init(stats);
+    if (settings) {
+      settingsEvents.init(settings);
+    }
     entryEvents.setEntry(entry);
     synced();
   }, []);
