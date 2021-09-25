@@ -8,6 +8,7 @@ import {
   settingsEvents,
   $preferedTheme,
   Theme,
+  $featureFlags,
 } from '../../store/settings';
 import { ThemeTogglePure } from '../../Theme/ThemeToggle';
 
@@ -22,6 +23,8 @@ type Props = {
   onToggleAlertSound: () => void;
   currentTheme: Theme;
   setTheme: (theme: Theme) => void;
+  featureFlags: Record<string, boolean>;
+  onToggleFeatureFlag: (flagName: string) => void;
 };
 
 export const SettingsPure: React.FC<Props> = ({
@@ -35,6 +38,8 @@ export const SettingsPure: React.FC<Props> = ({
   onAlertVolumeChange,
   currentTheme,
   setTheme,
+  featureFlags,
+  onToggleFeatureFlag,
 }) => {
   return (
     <div>
@@ -82,6 +87,21 @@ export const SettingsPure: React.FC<Props> = ({
           value={alertVolume}
         />
       </div>
+
+      {Object.keys(featureFlags).length ? <div> FeatureFlags</div> : null}
+
+      {Object.entries(featureFlags).map(([name, value]) => (
+        <div key={name}>
+          <span> {name}</span>
+          <input
+            type="checkbox"
+            id={name}
+            name={name}
+            checked={!!value}
+            onChange={() => onToggleFeatureFlag(name)}
+          />
+        </div>
+      ))}
     </div>
   );
 };
@@ -92,6 +112,7 @@ export const Settings = () => {
   const isTickSoundEnabled = useStore($isTickSoundEnabled);
   const isAlertSoundEnabled = useStore($isAlertSoundEnabled);
   const currentTheme = useStore($preferedTheme);
+  const featureFlags = useStore($featureFlags);
 
   return (
     <SettingsPure
@@ -105,6 +126,8 @@ export const Settings = () => {
       onToggleTickSound={settingsEvents.toggleTickSound}
       setTheme={settingsEvents.setPreferedTheme}
       currentTheme={currentTheme}
+      featureFlags={featureFlags}
+      onToggleFeatureFlag={settingsEvents.toggleFeatureFlag as any}
     />
   );
 };

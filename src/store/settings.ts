@@ -5,11 +5,33 @@ export enum Theme {
   Light = 'light',
   Dark = 'dark',
 }
-export const $tickVolume = domain.createStore(0.1);
-export const $alertVolume = domain.createStore(1);
-export const $isTickSoundEnabled = domain.createStore(true);
-export const $isAlertSoundEnabled = domain.createStore(true);
-export const $preferedTheme = domain.createStore<Theme>(Theme.Dark);
+type FeatureFlags = {
+  useWebWorkersForTicking: boolean;
+};
+export type Settings = {
+  tickVolume: number;
+  alertVolume: number;
+  isTickSoundEnabled: boolean;
+  isAlertSoundEnabled: boolean;
+  preferedTheme: Theme;
+  featureFlags: FeatureFlags;
+};
+
+export const defaultSettings: Settings = {
+  tickVolume: 0.2,
+  alertVolume: 1,
+  isTickSoundEnabled: true,
+  isAlertSoundEnabled: true,
+  preferedTheme: Theme.Dark,
+  featureFlags: { useWebWorkersForTicking: false },
+};
+
+export const $tickVolume = domain.createStore(defaultSettings.tickVolume);
+export const $alertVolume = domain.createStore(defaultSettings.alertVolume);
+export const $isTickSoundEnabled = domain.createStore(defaultSettings.isTickSoundEnabled);
+export const $isAlertSoundEnabled = domain.createStore(defaultSettings.isAlertSoundEnabled);
+export const $preferedTheme = domain.createStore<Theme>(defaultSettings.preferedTheme);
+export const $featureFlags = domain.createStore<FeatureFlags>(defaultSettings.featureFlags);
 
 export const $settings = combine({
   tickVolume: $tickVolume,
@@ -17,6 +39,7 @@ export const $settings = combine({
   isTickSoundEnabled: $isTickSoundEnabled,
   isAlertSoundEnabled: $isAlertSoundEnabled,
   preferedTheme: $preferedTheme,
+  featureFlags: $featureFlags,
 });
 
 export const settingsEvents = {
@@ -25,13 +48,8 @@ export const settingsEvents = {
   toggleTickSound: domain.createEvent<void>(),
   toggleAlertSound: domain.createEvent<void>(),
   setPreferedTheme: domain.createEvent<Theme>(),
-  init: domain.createEvent<{
-    tickVolume: number;
-    alertVolume: number;
-    isTickSoundEnabled: boolean;
-    isAlertSoundEnabled: boolean;
-    preferedTheme: Theme;
-  }>(),
+  toggleFeatureFlag: domain.createEvent<keyof FeatureFlags>(),
+  init: domain.createEvent<Settings>(),
 };
 
 $tickVolume
@@ -49,6 +67,10 @@ $isAlertSoundEnabled
 $preferedTheme
   .on(settingsEvents.setPreferedTheme, (s, p) => p)
   .on(settingsEvents.init, (s, p) => p.preferedTheme);
+
+$featureFlags
+  .on(settingsEvents.toggleFeatureFlag, (s, p) => ({ ...s, [p]: !s[p] }))
+  .on(settingsEvents.init, (s, p) => p.featureFlags);
 
 export const $isNeedToMakeTick = combine({ $tickVolume, $isTickSoundEnabled }).map(
   (payload) => !!payload.$isTickSoundEnabled && payload.$tickVolume > 0,

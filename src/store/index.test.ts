@@ -10,6 +10,7 @@ import {
   unpauseTimer,
   startPomodoro,
   tick,
+  restoreState,
 } from './index';
 
 import { $currentEntry } from './currentEntry';
@@ -21,9 +22,15 @@ import { TimerState } from '../Features/Timer/types';
 import { TimeEntryType } from '../Features/types';
 
 import { domain } from './domain';
-import { settingsEvents } from './settings';
+import { defaultSettings, settingsEvents } from './settings';
 import { sounder } from '../Features/Timer/sounder';
 
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+};
+// @ts-ignore
+global.localStorage = localStorageMock;
 jest.mock('../Features/Timer/sounder');
 
 describe('pomodoro state', () => {
@@ -298,4 +305,30 @@ describe('pomodoro state', () => {
     expect(sounder.ding).not.toHaveBeenCalled();
     expect(sounder.setDingVolume).toHaveBeenCalledWith(0);
   });
+
+  it('должен загрузить данные из localStorage', async () => {
+    localStorageMock.getItem.mockImplementationOnce(() =>
+      JSON.stringify({
+        v: 1,
+        data: {
+          entry: {
+            type: TimeEntryType.Time,
+            startTime: Date.now(),
+            completedTime: 0,
+          },
+          stats: { entries: [] },
+          timer: TimerState.Active,
+          settings: defaultSettings,
+        },
+      }),
+    );
+
+    const scope = fork(domain);
+
+    await allSettled(restoreState, { scope });
+
+    expect(scope.getState($currentEntry)?.type).toEqual(TimeEntryType.Time);
+  });
 });
+
+/* eslint-enable max-statements */

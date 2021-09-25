@@ -8,14 +8,16 @@ export type TimeEntry = {
   completedTime: number;
   endTime: number;
 };
+
+export type StatsState = {
+  entries: TimeEntry[];
+};
 export const statsEvents = {
   addEntry: domain.createEvent<TimeEntry>(),
   init: domain.createEvent<{ entries: TimeEntry[] }>(),
 };
 
-const initialState: {
-  entries: TimeEntry[];
-} = {
+const initialState: StatsState = {
   entries: [],
 };
 export const $stats = domain

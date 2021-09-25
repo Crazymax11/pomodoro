@@ -1,59 +1,21 @@
-import { combine, createEvent, createStore } from 'effector';
 import React, { useEffect } from 'react';
 import { Settings } from '../../Features/Settings/Settings';
+import { useSettingsSync } from '../../Features/StateSync/useSettingsSync';
 import { TodayChart } from '../../Features/Stats/components/TodayChart';
 
 import { TodayStats } from '../../Features/Stats/components/TodayStats';
 
 import { Timer } from '../../Features/Timer/components/Timer';
+import { useTimerForTicking } from '../../Features/Timer/useTimerForTicking';
 import { TimeEntryType } from '../../Features/types';
-import { formatToReadableTime, seconds } from '../../Features/utils';
-import { tick } from '../../store';
-import { $currentEntry, entryEvents } from '../../store/currentEntry';
-import { $settings, settingsEvents } from '../../store/settings';
-import { $stats, statsEvents } from '../../store/stats';
-import { $timerState, timerEvents, TimerState } from '../../store/timer';
+import { formatToReadableTime } from '../../Features/utils';
+
+import { $currentEntry } from '../../store/currentEntry';
 
 import styles from './index.module.css';
 
-const synced = createEvent();
-const $syncer = createStore(false).on(synced, () => true);
-
-combine([$currentEntry, $stats, $timerState, $syncer, $settings]).watch(
-  ([entry, stats, timer, syncer, settings]) => {
-    if (!syncer) {
-      return;
-    }
-
-    localStorage.setItem(
-      'pomodoro',
-      JSON.stringify({
-        entry,
-        stats,
-        timer: timer === TimerState.Active ? TimerState.Paused : timer,
-        settings,
-      }),
-    );
-  },
-);
-
 export const Main = () => {
-  useEffect(() => {
-    const possibleItem = localStorage.getItem('pomodoro');
-
-    if (!possibleItem) {
-      synced();
-      return;
-    }
-    const { entry, stats, timer, settings } = JSON.parse(possibleItem);
-    timerEvents.init(timer);
-    statsEvents.init(stats);
-    if (settings) {
-      settingsEvents.init(settings);
-    }
-    entryEvents.setEntry(entry);
-    synced();
-  }, []);
+  useSettingsSync();
   useEffect(() => {
     const link = document.querySelector("link[rel~='icon']")!;
     $currentEntry.watch((entry) => {
@@ -87,12 +49,7 @@ export const Main = () => {
       link.href = entryTypeIcons[entry.type];
     });
   }, []);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      tick(seconds(1));
-    }, seconds(1));
-    return () => clearInterval(interval);
-  }, []);
+  useTimerForTicking();
 
   return (
     <div className={styles.layout}>

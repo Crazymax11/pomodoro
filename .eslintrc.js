@@ -14,5 +14,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': ['error'],
     'import/no-default-export': 'warn',
     'react/prop-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'warn',
+    'consistent-return': 'off',
   },
 };

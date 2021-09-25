@@ -1,13 +1,21 @@
-import { forward, guard, sample } from 'effector';
+import { combine, forward, guard, sample } from 'effector';
 import { sounder } from '../Features/Timer/sounder';
 
 import { TimeEntry } from '../Features/Timer/types';
 import { TimeEntryType } from '../Features/types';
 import { entryEvents, $currentEntry } from './currentEntry';
 import { domain } from './domain';
-import { statsEvents } from './stats';
+import { $stats, statsEvents } from './stats';
 import { $timerState, timerEvents, TimerState } from './timer';
-import { $alertVolume, $isNeedToMakeAlert, $isNeedToMakeTick, $tickVolume } from './settings';
+import {
+  $alertVolume,
+  $isNeedToMakeAlert,
+  $isNeedToMakeTick,
+  $settings,
+  $tickVolume,
+  settingsEvents,
+} from './settings';
+import { StateSync } from '../Features/StateSync/StateSync';
 
 export const startPomodoro = domain.createEvent<number>();
 export const startResting = domain.createEvent<number>();
@@ -134,6 +142,7 @@ const realActiveTick = domain.createEvent();
 guard({
   clock: activeTick,
   source: $isNeedToMakeTick,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   filter: (isTickSoundEnabled, tick) => !!tick && isTickSoundEnabled,
   target: realActiveTick,
 });
@@ -143,3 +152,35 @@ forward({ from: toIdle, to: timerEvents.idle });
 
 $tickVolume.watch((volume) => sounder.setTickVolume(volume));
 $alertVolume.watch((volume) => sounder.setDingVolume(volume));
+const syncedEvent = domain.createEvent();
+const $isSynced = domain.createStore(false).on(syncedEvent, () => true);
+export const restoreState = domain.createEffect(() => {
+  const savedState = StateSync.load();
+  if (!savedState) {
+    return;
+  }
+
+  timerEvents.init(savedState.timer);
+  statsEvents.init(savedState.stats);
+
+  settingsEvents.init(savedState.settings);
+  if (savedState.entry) {
+    entryEvents.setEntry(savedState.entry);
+  }
+  syncedEvent();
+});
+
+combine([$currentEntry, $stats, $timerState, $isSynced, $settings]).watch(
+  ([entry, stats, timer, isSynced, settings]) => {
+    if (!isSynced) {
+      return;
+    }
+
+    StateSync.save({
+      entry,
+      stats,
+      timer,
+      settings,
+    });
+  },
+);
