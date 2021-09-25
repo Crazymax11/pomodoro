@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import { allSettled, fork } from 'effector';
 import {
   completePureTime,
@@ -20,10 +21,15 @@ import { TimerState } from '../Features/Timer/types';
 import { TimeEntryType } from '../Features/types';
 
 import { domain } from './domain';
+import { settingsEvents } from './settings';
+import { sounder } from '../Features/Timer/sounder';
 
 jest.mock('../Features/Timer/sounder');
 
 describe('pomodoro state', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it('должен вернуть Idle стейт в самом начале', () => {
     const scope = fork(domain);
     expect(scope.getState($timerState)).toEqual(TimerState.Idle);
@@ -235,5 +241,61 @@ describe('pomodoro state', () => {
 
     expect(scope.getState($currentEntry)?.type).toEqual(undefined);
     expect(scope.getState($stats).entries[0].completedTime).toEqual(minutes(25));
+  });
+
+  it('тик должен звучать, если включен в настройках', async () => {
+    const scope = fork(domain);
+
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(20) });
+
+    expect(sounder.tick).toHaveBeenCalled();
+  });
+
+  it('не должен звучать тик, если он выключен в настройках', async () => {
+    const scope = fork(domain);
+
+    await allSettled(settingsEvents.toggleTickSound, { scope });
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(20) });
+
+    expect(sounder.tick).not.toHaveBeenCalled();
+  });
+  it('не должен звучать тик, если его громкость установлена в 0', async () => {
+    const scope = fork(domain);
+
+    await allSettled(settingsEvents.setTickVolume, { scope, params: 0 });
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(20) });
+
+    expect(sounder.tick).not.toHaveBeenCalled();
+    expect(sounder.setTickVolume).toHaveBeenCalledWith(0);
+  });
+  it('алерт должен звучать, если включен в настройках', async () => {
+    const scope = fork(domain);
+
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(25) });
+
+    expect(sounder.ding).toHaveBeenCalled();
+  });
+  it('не должен звучать алерт, если он выключен в настройках', async () => {
+    const scope = fork(domain);
+
+    await allSettled(settingsEvents.toggleAlertSound, { scope });
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(25) });
+
+    expect(sounder.ding).not.toHaveBeenCalled();
+  });
+  it('не должен звучать алерт, если его громкость установлена в 0', async () => {
+    const scope = fork(domain);
+
+    await allSettled(settingsEvents.setAlertVolume, { scope, params: 0 });
+    await allSettled(startPomodoro, { scope, params: minutes(25) });
+    await allSettled(tick, { scope, params: minutes(25) });
+
+    expect(sounder.ding).not.toHaveBeenCalled();
+    expect(sounder.setDingVolume).toHaveBeenCalledWith(0);
   });
 });

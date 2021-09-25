@@ -7,6 +7,7 @@ import { entryEvents, $currentEntry } from './currentEntry';
 import { domain } from './domain';
 import { statsEvents } from './stats';
 import { $timerState, timerEvents, TimerState } from './timer';
+import { $alertVolume, $isNeedToMakeAlert, $isNeedToMakeTick, $tickVolume } from './settings';
 
 export const startPomodoro = domain.createEvent<number>();
 export const startResting = domain.createEvent<number>();
@@ -118,14 +119,27 @@ guard({
   target: timerEvents.suggestResting,
 });
 
-complete.watch(sounder.ding);
+const makeDingSound = domain.createEvent();
+guard({
+  source: $isNeedToMakeAlert,
+  clock: complete,
+  filter: (isEnabled) => !!isEnabled,
+  target: makeDingSound,
+});
+
+makeDingSound.watch(sounder.ding);
 
 const realActiveTick = domain.createEvent();
+
 guard({
-  source: activeTick,
-  filter: (tick) => !!tick,
+  clock: activeTick,
+  source: $isNeedToMakeTick,
+  filter: (isTickSoundEnabled, tick) => !!tick && isTickSoundEnabled,
   target: realActiveTick,
 });
 realActiveTick.watch(sounder.tick);
 
 forward({ from: toIdle, to: timerEvents.idle });
+
+$tickVolume.watch((volume) => sounder.setTickVolume(volume));
+$alertVolume.watch((volume) => sounder.setDingVolume(volume));

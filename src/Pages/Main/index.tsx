@@ -1,5 +1,6 @@
 import { combine, createEvent, createStore } from 'effector';
 import React, { useEffect } from 'react';
+import { Settings } from '../../Features/Settings/Settings';
 import { TodayChart } from '../../Features/Stats/components/TodayChart';
 
 import { TodayStats } from '../../Features/Stats/components/TodayStats';
@@ -88,6 +89,7 @@ export const Main = () => {
 
   return (
     <div className={styles.layout}>
+      <Settings />
       <div>
         <h3>Стата за сегодня</h3>
         <div

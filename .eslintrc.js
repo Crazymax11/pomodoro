@@ -13,5 +13,6 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'error',
     '@typescript-eslint/no-use-before-define': ['error'],
     'import/no-default-export': 'warn',
+    'react/prop-types': 'off',
   },
 };
