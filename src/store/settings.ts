@@ -5,9 +5,8 @@ export enum Theme {
   Light = 'light',
   Dark = 'dark',
 }
-type FeatureFlags = {
-  useWebWorkersForTicking: boolean;
-};
+// eslint-disable-next-line @typescript-eslint/ban-types
+type FeatureFlags = {};
 export type Settings = {
   tickVolume: number;
   alertVolume: number;
