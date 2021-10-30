@@ -12,38 +12,39 @@ export default {
 
 const Template: ComponentStory<typeof TodayChartPure> = (args) => <TodayChartPure {...args} />;
 
+const entries = [
+  {
+    startTime: new Date().setHours(10, 0, 0, 0),
+    completedTime: minutes(25),
+    endTime: new Date().setHours(10, 25, 0, 0),
+    type: TimeEntryType.Pomodoro,
+  },
+  {
+    startTime: new Date().setHours(10, 25, 0, 0),
+    completedTime: minutes(5),
+    endTime: new Date().setHours(10, 30, 0, 0),
+    type: TimeEntryType.Rest,
+  },
+  {
+    startTime: new Date().setHours(10, 30, 0, 0),
+    completedTime: minutes(30),
+    endTime: new Date().setHours(11, 0, 0, 0),
+    type: TimeEntryType.Time,
+  },
+  {
+    startTime: new Date().setHours(11, 0, 0, 0),
+    completedTime: minutes(25),
+    endTime: new Date().setHours(11, 40, 0, 0),
+    type: TimeEntryType.Pomodoro,
+  },
+  {
+    startTime: new Date().setHours(11, 40, 0, 0),
+    completedTime: minutes(20),
+    endTime: new Date().setHours(12, 0, 0, 0),
+    type: TimeEntryType.Rest,
+  },
+];
 export const Overview = Template.bind({});
 Overview.args = {
-  entries: [
-    {
-      startTime: new Date().setHours(10, 0, 0, 0),
-      completedTime: minutes(25),
-      endTime: new Date().setHours(10, 25, 0, 0),
-      type: TimeEntryType.Pomodoro,
-    },
-    {
-      startTime: new Date().setHours(10, 25, 0, 0),
-      completedTime: minutes(5),
-      endTime: new Date().setHours(10, 30, 0, 0),
-      type: TimeEntryType.Rest,
-    },
-    {
-      startTime: new Date().setHours(10, 30, 0, 0),
-      completedTime: minutes(30),
-      endTime: new Date().setHours(11, 0, 0, 0),
-      type: TimeEntryType.Time,
-    },
-    {
-      startTime: new Date().setHours(11, 0, 0, 0),
-      completedTime: minutes(25),
-      endTime: new Date().setHours(11, 40, 0, 0),
-      type: TimeEntryType.Pomodoro,
-    },
-    {
-      startTime: new Date().setHours(11, 40, 0, 0),
-      completedTime: minutes(20),
-      endTime: new Date().setHours(12, 0, 0, 0),
-      type: TimeEntryType.Rest,
-    },
-  ],
+  entries,
 };

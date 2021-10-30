@@ -1,0 +1,12 @@
+.tooltip {
+  position: absolute;
+  display: none;
+  top: 100%;
+}
+
+.root:hover .tooltip {
+  display: block;
+}
+.root {
+  cursor: pointer;
+}

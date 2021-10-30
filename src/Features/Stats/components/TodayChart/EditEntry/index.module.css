@@ -1,0 +1,41 @@
+.root {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  min-width: 60ch;
+  min-height: 40ch;
+  padding: 2ch 4ch;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  background-color: var(--content-background-color);
+  position: relative;
+}
+
+.removeIcon {
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.closeIcon {
+  cursor: pointer;
+  position: absolute;
+  right: 4ch;
+  top: 2ch;
+}
+
+.content {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

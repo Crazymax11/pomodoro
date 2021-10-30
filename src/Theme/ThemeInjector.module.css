@@ -1,11 +1,13 @@
 .dark {
   --background-color: #2b2b2b;
   --text-color: #f8f8f2;
+  --content-background-color: #2f2f2f;
 }
 
 .light {
   --background-color: white;
   --text-color: black;
+  --content-background-color: rgb(233, 231, 231);
 }
 
 .injectedRoot {
