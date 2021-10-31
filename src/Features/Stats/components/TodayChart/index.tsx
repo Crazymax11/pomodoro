@@ -18,7 +18,7 @@ const TimeBlock = React.memo(
   (props: { type: TimeEntryType; size: number; position: number; onClick: () => void }) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const divRef = useRef<HTMLDivElement>(null);
-    console.log(props);
+
     useEffect(() => {
       if (!svgRef.current || !divRef.current) {
         return;
