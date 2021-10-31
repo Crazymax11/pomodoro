@@ -28,6 +28,7 @@ AllDisabled.args = {
   isTickSoundEnabled: false,
   currentTheme: Theme.Dark,
   featureFlags: {},
+  isOpened: true,
 };
 
 export const All05 = Template.bind({});
@@ -38,6 +39,7 @@ All05.args = {
   isTickSoundEnabled: true,
   currentTheme: Theme.Dark,
   featureFlags: {},
+  isOpened: true,
 };
 
 export const FullValue = Template.bind({});
@@ -48,6 +50,7 @@ FullValue.args = {
   isTickSoundEnabled: true,
   currentTheme: Theme.Dark,
   featureFlags: {},
+  isOpened: true,
 };
 
 export const Mute = Template.bind({});
@@ -58,6 +61,7 @@ Mute.args = {
   isTickSoundEnabled: true,
   featureFlags: {},
   currentTheme: Theme.Dark,
+  isOpened: true,
 };
 
 export const FeatureFlags = Template.bind({});
@@ -71,4 +75,5 @@ FeatureFlags.args = {
     disabled: false,
   },
   currentTheme: Theme.Dark,
+  isOpened: true,
 };

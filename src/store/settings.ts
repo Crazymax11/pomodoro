@@ -22,7 +22,7 @@ export const defaultSettings: Settings = {
   isTickSoundEnabled: true,
   isAlertSoundEnabled: true,
   preferedTheme: Theme.Dark,
-  featureFlags: { useWebWorkersForTicking: false },
+  featureFlags: {},
 };
 
 export const $tickVolume = domain.createStore(defaultSettings.tickVolume);

@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   $tickVolume,
   $alertVolume,
@@ -11,6 +11,8 @@ import {
   $featureFlags,
 } from '../../store/settings';
 import { ThemeTogglePure } from '../../Theme/ThemeToggle';
+import { Modal } from '../shared/Modal';
+import styles from './Settings.module.css';
 
 type Props = {
   tickVolume: number;
@@ -25,6 +27,7 @@ type Props = {
   setTheme: (theme: Theme) => void;
   featureFlags: Record<string, boolean>;
   onToggleFeatureFlag: (flagName: string) => void;
+  isOpened?: boolean;
 };
 
 export const SettingsPure: React.FC<Props> = ({
@@ -40,68 +43,76 @@ export const SettingsPure: React.FC<Props> = ({
   setTheme,
   featureFlags,
   onToggleFeatureFlag,
+  isOpened,
 }) => {
+  const [isModalOpened, setIsOpened] = useState(isOpened || false);
   return (
     <div>
-      <div>Настройки</div>
-      <ThemeTogglePure setTheme={setTheme} currentTheme={currentTheme} />
-      <div>
-        <label> Тикание</label>
-        <input
-          checked={isTickSoundEnabled}
-          type="checkbox"
-          id="tickSound"
-          name="tickSound"
-          onChange={onToggleTickSound}
-        />
-        <input
-          type="range"
-          id="tickVolume"
-          name="tickVolume"
-          min="0"
-          max="1"
-          step="0.1"
-          disabled={!isTickSoundEnabled}
-          onChange={(e) => onTickVolumeChange(Number(e.target.value))}
-          value={tickVolume}
-        />
-      </div>
-      <div>
-        <label> Алерт</label>
-        <input
-          type="checkbox"
-          id="alertSound"
-          name="alertSound"
-          checked={isAlertSoundEnabled}
-          onChange={onToggleAlertSound}
-        />
-        <input
-          type="range"
-          id="alertVolume"
-          name="alertVolume"
-          min="0"
-          max="1"
-          step="0.1"
-          disabled={!isAlertSoundEnabled}
-          onChange={(e) => onAlertVolumeChange(Number(e.target.value))}
-          value={alertVolume}
-        />
-      </div>
+      <span className={styles.button} onClick={() => setIsOpened(true)}>
+        ⚙️
+      </span>
+      {isModalOpened && (
+        <Modal onClose={() => setIsOpened(false)}>
+          <ThemeTogglePure setTheme={setTheme} currentTheme={currentTheme} />
+          <div>
+            <label> Тикание</label>
+            <input
+              checked={isTickSoundEnabled}
+              type="checkbox"
+              id="tickSound"
+              name="tickSound"
+              onChange={onToggleTickSound}
+            />
+            <input
+              type="range"
+              id="tickVolume"
+              name="tickVolume"
+              min="0"
+              max="1"
+              step="0.1"
+              disabled={!isTickSoundEnabled}
+              onChange={(e) => onTickVolumeChange(Number(e.target.value))}
+              value={tickVolume}
+            />
+          </div>
+          <div>
+            <label> Алерт</label>
+            <input
+              type="checkbox"
+              id="alertSound"
+              name="alertSound"
+              checked={isAlertSoundEnabled}
+              onChange={onToggleAlertSound}
+            />
+            <input
+              type="range"
+              id="alertVolume"
+              name="alertVolume"
+              min="0"
+              max="1"
+              step="0.1"
+              disabled={!isAlertSoundEnabled}
+              onChange={(e) => onAlertVolumeChange(Number(e.target.value))}
+              value={alertVolume}
+            />
+          </div>
 
-      {Object.keys(featureFlags).length ? <div> FeatureFlags</div> : null}
+          {Object.keys(featureFlags).length ? <div> FeatureFlags</div> : null}
 
-      {Object.entries(featureFlags).map(([name, value]) => (
-        <div key={name}>
-          <span> {name}</span>
-          <input
-            type="checkbox"
-            id={name}
-            name={name}
-            checked={!!value}
-            onChange={() => onToggleFeatureFlag(name)}
-          />
-        </div>
-      ))}
+          {Object.entries(featureFlags).map(([name, value]) => (
+            <div key={name}>
+              <span> {name}</span>
+              <input
+                type="checkbox"
+                id={name}
+                name={name}
+                checked={!!value}
+                onChange={() => onToggleFeatureFlag(name)}
+              />
+            </div>
+          ))}
+        </Modal>
+      )}
     </div>
   );
 };
