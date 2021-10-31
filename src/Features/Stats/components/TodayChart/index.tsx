@@ -52,10 +52,6 @@ const TimeBlock = React.memo(
         }}
         onClick={props.onClick}
       >
-        <div className={styles.tooltip}>
-          <div>edit</div>
-          <div>remove</div>
-        </div>
         <svg style={{ width: '100%', height: '100%' }} ref={svgRef} />
       </div>
     );
