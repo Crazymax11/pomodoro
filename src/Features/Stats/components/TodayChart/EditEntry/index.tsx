@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TimeEntry } from '../../../../../store/stats';
+import { Button } from '../../../../shared/Button/Button';
 
 import { Modal } from '../../../../shared/Modal';
 
@@ -41,13 +42,8 @@ export const EditEntry: React.FC<Props> = (props) => {
           </div>
         </div>
         <div className={styles.footer}>
-          {!props.isCreation && (
-            <button className={styles.button} onClick={props.onRemove}>
-              Удалить 🗑️
-            </button>
-          )}
-          <button
-            className={styles.button}
+          {!props.isCreation && <Button onClick={props.onRemove}>Удалить 🗑️</Button>}
+          <Button
             onClick={() => {
               props.onSave({
                 startTime,
@@ -58,7 +54,7 @@ export const EditEntry: React.FC<Props> = (props) => {
             }}
           >
             Сохранить 💾
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
