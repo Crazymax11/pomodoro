@@ -31,12 +31,19 @@ export const Idle = ({ onStartPomodoro, onStartPureTime }: Props) => {
       )),
     [onStartPomodoro],
   );
+
+  const pureTimeButton = (
+    <span className={styles.button} onClick={onStartPureTime}>
+      ⌛
+    </span>
+  );
+
+  const buttonGroups = [pomodoroButtons.slice(0, 3), pomodoroButtons.slice(3), [pureTimeButton]];
+
   return (
-    <div>
-      {pomodoroButtons}
-      <span className={styles.button} onClick={onStartPureTime}>
-        ⌛
-      </span>
+    <div className={styles.root}>
+      {...pomodoroButtons}
+      {pureTimeButton}
     </div>
   );
 };

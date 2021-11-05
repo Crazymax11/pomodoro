@@ -10,4 +10,5 @@
   align-self: center;
   justify-self: center;
   display: flex;
+  width: 100%;
 }

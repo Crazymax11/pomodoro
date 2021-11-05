@@ -19,3 +19,26 @@
 
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
+
+.root {
+}
+
+@media (max-width: 600px) {
+  .root {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (min-width: 601px) {
+  .root {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    justify-content: center;
+    margin: auto;
+  }
+}
