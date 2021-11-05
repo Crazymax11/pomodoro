@@ -1,6 +1,7 @@
 import { useStore } from 'effector-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import rough from 'roughjs';
+import { removeStoredEntry } from '../../../../store';
 import { $stats, TimeEntry } from '../../../../store/stats';
 import { TimeEntryType } from '../../../types';
 import { minutes } from '../../../utils';
@@ -157,5 +158,5 @@ export const TodayChartPure = (props: Props) => {
 export const TodayChart = () => {
   const stats = useStore($stats);
 
-  return <TodayChartPure entries={stats.entries.filter(isToday)} removeEntry={() => {}} />;
+  return <TodayChartPure entries={stats.entries.filter(isToday)} removeEntry={removeStoredEntry} />;
 };

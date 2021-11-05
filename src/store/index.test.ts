@@ -11,6 +11,7 @@ import {
   startPomodoro,
   tick,
   restoreState,
+  removeStoredEntry,
 } from './index';
 
 import { $currentEntry } from './currentEntry';
@@ -328,6 +329,19 @@ describe('pomodoro state', () => {
     await allSettled(restoreState, { scope });
 
     expect(scope.getState($currentEntry)?.type).toEqual(TimeEntryType.Time);
+  });
+
+  it('должен удалить timeentry из статы', async () => {
+    const scope = fork(domain);
+    await allSettled(startPureTime, { scope });
+    await allSettled(tick, { scope, params: minutes(5) });
+    await allSettled(completePureTime, { scope });
+
+    const storedEntry = scope.getState($stats).entries[0];
+
+    await allSettled(removeStoredEntry, { scope, params: storedEntry });
+
+    expect(scope.getState($stats).entries.length).toEqual(0);
   });
 });
 

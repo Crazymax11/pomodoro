@@ -21,7 +21,7 @@ export const EditEntry: React.FC<Props> = (props) => {
           <div> startTime: {new Date(props.entry.startTime).toLocaleString()}</div>
           <div> endTime: {new Date(props.entry.endTime).toLocaleString()} </div>
           <div> completed Time : {formatToReadableTime(props.entry.completedTime)} </div>
-          <span className={styles.removeIcon} title="remove">
+          <span onClick={props.onRemove} className={styles.removeIcon} title="remove">
             🗑️
           </span>
         </div>

@@ -15,6 +15,7 @@ export type StatsState = {
 export const statsEvents = {
   addEntry: domain.createEvent<TimeEntry>(),
   init: domain.createEvent<{ entries: TimeEntry[] }>(),
+  remove: domain.createEvent<TimeEntry>(),
 };
 
 const initialState: StatsState = {
@@ -25,4 +26,10 @@ export const $stats = domain
   .on(statsEvents.addEntry, (state, payload) => ({
     entries: [...state.entries, payload],
   }))
-  .on(statsEvents.init, (_, payload) => payload);
+  .on(statsEvents.init, (_, payload) => payload)
+  .on(statsEvents.remove, (state, payload) => {
+    return {
+      ...state,
+      entries: state.entries.filter((e) => e !== payload),
+    };
+  });

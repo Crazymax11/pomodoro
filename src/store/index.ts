@@ -5,7 +5,7 @@ import { TimeEntry } from '../Features/Timer/types';
 import { TimeEntryType } from '../Features/types';
 import { entryEvents, $currentEntry } from './currentEntry';
 import { domain } from './domain';
-import { $stats, statsEvents } from './stats';
+import { $stats, statsEvents, TimeEntry as StatsTimeEntry } from './stats';
 import { $timerState, timerEvents, TimerState } from './timer';
 import {
   $alertVolume,
@@ -26,6 +26,8 @@ export const drop = domain.createEvent();
 export const completePureTime = domain.createEvent();
 export const toIdle = domain.createEvent();
 export const tick = domain.createEvent<number>();
+export const removeStoredEntry = domain.createEvent<StatsTimeEntry>();
+
 const complete = domain.createEvent<TimeEntry>();
 
 const createTimeEntry =
@@ -44,6 +46,11 @@ forward({
     startPomodoro.map(createTimeEntry(TimeEntryType.Pomodoro)),
   ],
   to: [entryEvents.setEntry, timerEvents.start as any],
+});
+
+forward({
+  from: removeStoredEntry,
+  to: statsEvents.remove,
 });
 
 const activeTick = sample({
