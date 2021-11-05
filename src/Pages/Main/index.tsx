@@ -57,12 +57,18 @@ export const Main = () => {
       <div>
         <h3>Стата за сегодня</h3>
         <div
-          style={{ marginBottom: 12, display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+          style={{
+            marginBottom: 12,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
         >
           <TodayStats />
-          <div style={{ flexGrow: 1 }}>
-            <TodayChart />
-          </div>
+        </div>
+        <div style={{ flexGrow: 1 }}>
+          <TodayChart />
         </div>
       </div>
 

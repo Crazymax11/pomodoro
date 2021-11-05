@@ -38,7 +38,7 @@ export const EditEntry: React.FC<Props> = (props) => {
             endTime: <DateTimeInput value={endTime} onChange={setEndTime} />
           </div>
           <div className={styles.field}>
-            completed Time : <DurationInput value={completedTime} onChange={setCompletedTime} />
+            completedTime: <DurationInput value={completedTime} onChange={setCompletedTime} />
           </div>
         </div>
         <div className={styles.footer}>

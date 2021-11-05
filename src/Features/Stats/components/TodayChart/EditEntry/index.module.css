@@ -8,16 +8,22 @@
 }
 .header {
   font-size: 24px;
+  margin-bottom: 8px;
 }
 
 .field {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .field + .field {
   margin-top: 4px;
+}
+
+.footer {
+  margin-top: 8px;
 }
 
 .footer > * {

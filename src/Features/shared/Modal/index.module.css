@@ -12,8 +12,8 @@
 }
 
 .container {
-  min-width: 400px;
-  min-height: 300px;
+  min-width: calc(min(400px, vw) - 4ch);
+  min-height: calc(min(300px, vh) - 8ch);
   padding: 2ch 4ch;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   background-color: var(--content-background-color);

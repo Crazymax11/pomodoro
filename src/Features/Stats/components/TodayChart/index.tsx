@@ -70,7 +70,7 @@ const HourLine = React.memo((props: { position: number; hour: number }) => {
         borderLeft: 'solid grey 1px',
       }}
     >
-      <div style={{ marginTop: 40 }}>{props.hour}:00</div>
+      <div style={{ marginTop: 40 }}>{props.hour}</div>
     </div>
   );
 });
