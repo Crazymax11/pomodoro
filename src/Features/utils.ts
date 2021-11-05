@@ -1,5 +1,6 @@
 export const seconds = (n: number) => n * 1000;
 export const minutes = (n: number) => n * seconds(60);
+export const hours = (n: number) => n * minutes(60);
 
 const addLeadingZero = (n: number) => (n < 10 ? `0${n}` : `${n}`);
 export const formatToReadableTime = (n: number) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TimeEntryType } from '../../types';
 
-const entryTypeEmojis: Record<TimeEntryType, string> = {
+export const entryTypeEmojis: Record<TimeEntryType, string> = {
   [TimeEntryType.Pomodoro]: '🍅',
   [TimeEntryType.Rest]: '🏖️',
   [TimeEntryType.Time]: '⏳',

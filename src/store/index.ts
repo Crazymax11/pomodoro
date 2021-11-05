@@ -27,6 +27,7 @@ export const completePureTime = domain.createEvent();
 export const toIdle = domain.createEvent();
 export const tick = domain.createEvent<number>();
 export const removeStoredEntry = domain.createEvent<StatsTimeEntry>();
+export const saveEntry = domain.createEvent<StatsTimeEntry>();
 
 const complete = domain.createEvent<TimeEntry>();
 
@@ -51,6 +52,11 @@ forward({
 forward({
   from: removeStoredEntry,
   to: statsEvents.remove,
+});
+
+forward({
+  from: saveEntry,
+  to: statsEvents.addEntry,
 });
 
 const activeTick = sample({

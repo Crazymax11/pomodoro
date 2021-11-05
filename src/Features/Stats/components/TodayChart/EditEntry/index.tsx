@@ -1,29 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TimeEntry } from '../../../../../store/stats';
-import { EntryTypeIcon } from '../../../../shared/EntryTypeIcon';
+
 import { Modal } from '../../../../shared/Modal';
-import { formatToReadableTime } from '../../../../utils';
+
+import { DateTimeInput } from './DateTimeInput/DateTimeInput';
+import { DurationInput } from './DurationInput/DurationInput';
+import { EntryTypeInput } from './EntryTypeInput/EntryTypeInput';
 import styles from './index.module.css';
 
 type Props = {
   entry: TimeEntry;
   onClose: () => void;
   onRemove: () => void;
+  onSave: (entry: TimeEntry) => void;
+  isCreation: boolean;
 };
 export const EditEntry: React.FC<Props> = (props) => {
+  const [startTime, setStartTime] = useState(props.entry.startTime);
+  const [endTime, setEndTime] = useState(props.entry.endTime);
+  const [completedTime, setCompletedTime] = useState(props.entry.completedTime);
+  const [entryType, setEntryType] = useState(props.entry.type);
+
   return (
     <Modal onClose={props.onClose}>
       <div className={styles.content}>
+        <div className={styles.header}>{props.isCreation ? 'Создание' : 'Редактирование'}</div>
         <div>
-          <div>
-            <EntryTypeIcon type={props.entry.type} />
+          <div className={styles.field}>
+            type: <EntryTypeInput value={entryType} onChange={setEntryType} />
           </div>
-          <div> startTime: {new Date(props.entry.startTime).toLocaleString()}</div>
-          <div> endTime: {new Date(props.entry.endTime).toLocaleString()} </div>
-          <div> completed Time : {formatToReadableTime(props.entry.completedTime)} </div>
-          <span onClick={props.onRemove} className={styles.removeIcon} title="remove">
-            🗑️
-          </span>
+
+          <div className={styles.field}>
+            startTime: <DateTimeInput value={startTime} onChange={setStartTime} />
+          </div>
+          <div className={styles.field}>
+            endTime: <DateTimeInput value={endTime} onChange={setEndTime} />
+          </div>
+          <div className={styles.field}>
+            completed Time : <DurationInput value={completedTime} onChange={setCompletedTime} />
+          </div>
+        </div>
+        <div className={styles.footer}>
+          {!props.isCreation && (
+            <button className={styles.button} onClick={props.onRemove}>
+              Удалить 🗑️
+            </button>
+          )}
+          <button
+            className={styles.button}
+            onClick={() => {
+              props.onSave({
+                startTime,
+                endTime,
+                type: entryType,
+                completedTime,
+              });
+            }}
+          >
+            Сохранить 💾
+          </button>
         </div>
       </div>
     </Modal>

@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import rough from 'roughjs';
-import { removeStoredEntry } from '../../../../store';
+import { removeStoredEntry, saveEntry } from '../../../../store';
 import { $stats, TimeEntry } from '../../../../store/stats';
 import { TimeEntryType } from '../../../types';
 import { minutes } from '../../../utils';
@@ -78,6 +78,7 @@ const HourLine = React.memo((props: { position: number; hour: number }) => {
 type Props = {
   entries: TimeEntry[];
   removeEntry: (entry: TimeEntry) => void;
+  saveEntry: (entry: TimeEntry) => void;
 };
 // eslint-disable-next-line max-statements
 export const TodayChartPure = (props: Props) => {
@@ -149,7 +150,16 @@ export const TodayChartPure = (props: Props) => {
         );
       })}
       {entryToEdit && (
-        <EditEntry entry={entryToEdit} onClose={closeModal} onRemove={handleOnRemove} />
+        <EditEntry
+          entry={entryToEdit}
+          onClose={closeModal}
+          onRemove={handleOnRemove}
+          isCreation={false}
+          onSave={(entry) => {
+            props.removeEntry(entryToEdit);
+            props.saveEntry(entry);
+          }}
+        />
       )}
     </div>
   );
@@ -158,5 +168,11 @@ export const TodayChartPure = (props: Props) => {
 export const TodayChart = () => {
   const stats = useStore($stats);
 
-  return <TodayChartPure entries={stats.entries.filter(isToday)} removeEntry={removeStoredEntry} />;
+  return (
+    <TodayChartPure
+      entries={stats.entries.filter(isToday)}
+      removeEntry={removeStoredEntry}
+      saveEntry={saveEntry}
+    />
+  );
 };
