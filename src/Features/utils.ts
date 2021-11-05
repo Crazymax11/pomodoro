@@ -8,6 +8,7 @@ export const formatToReadableTime = (n: number) => {
   const seconds = Math.floor(n / 1000);
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const minutes = Math.floor(seconds / 60);
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const hours = Math.floor(minutes / 60);
 
   return [hours, minutes % 60, seconds % 60].map(addLeadingZero).join(':');

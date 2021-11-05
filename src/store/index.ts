@@ -16,6 +16,7 @@ import {
   settingsEvents,
 } from './settings';
 import { StateSync } from '../Features/StateSync/StateSync';
+import { notify } from '../Features/Timer/notify';
 
 export const startPomodoro = domain.createEvent<number>();
 export const startResting = domain.createEvent<number>();
@@ -146,6 +147,27 @@ guard({
   clock: complete,
   filter: (isEnabled) => !!isEnabled,
   target: makeDingSound,
+});
+
+const notifyAboutCompletedEntry = domain.createEvent<TimeEntry>();
+
+guard({
+  clock: complete,
+  filter: (e) => {
+    return e.type === TimeEntryType.Pomodoro || e.type === TimeEntryType.Rest;
+  },
+  target: notifyAboutCompletedEntry,
+});
+
+notifyAboutCompletedEntry.watch((entry) => {
+  switch (entry.type) {
+    case TimeEntryType.Pomodoro:
+      notify('Помидорка закончилась, пора отдохнуть');
+      break;
+    case TimeEntryType.Rest:
+      notify('Пора снова фокусироваться!');
+      break;
+  }
 });
 
 makeDingSound.watch(sounder.ding);
