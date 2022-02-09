@@ -192,6 +192,7 @@ const $isSynced = domain.createStore(false).on(syncedEvent, () => true);
 export const restoreState = domain.createEffect(() => {
   const savedState = StateSync.load();
   if (!savedState) {
+    syncedEvent();
     return;
   }
 
