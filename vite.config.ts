@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     reactRefresh(),
     VitePWA({
-      includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon.png'],
+      includeAssets: ['/favicons/favicon.ico', '/favicons/apple-touch-icon.png'],
       manifest: {
         name: 'Pomodoro',
         short_name: 'Pomodoro',
@@ -15,17 +15,17 @@ export default defineConfig({
         theme_color: '#fc3903',
         icons: [
           {
-            src: 'android-chrome-192x192.png',
+            src: '/favicons/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png',
+            src: '/favicons/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png',
+            src: '/favicons/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
