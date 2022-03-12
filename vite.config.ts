@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     reactRefresh(),
     VitePWA({
-      includeAssets: ['/favicons/favicon.ico', '/favicons/apple-touch-icon.png'],
+      includeAssets: ['/favicons/pomodoro.ico', '/favicons/apple-touch-icon.png'],
       manifest: {
         name: 'Pomodoro',
         short_name: 'Pomodoro',
