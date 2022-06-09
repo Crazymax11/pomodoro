@@ -42,7 +42,7 @@ export const Idle = ({ onStartPomodoro, onStartPureTime }: Props) => {
 
   return (
     <div className={styles.root}>
-      {...pomodoroButtons}
+      {pomodoroButtons}
       {pureTimeButton}
     </div>
   );
