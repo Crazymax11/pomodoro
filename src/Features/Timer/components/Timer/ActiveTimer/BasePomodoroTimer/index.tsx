@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { TimeEntryType } from '../../../../../types';
 
 import { formatToReadableTime } from '../../../../../utils';
+import { NewTimer } from '../../NewTimer/NewTimer';
 
 import styles from './index.module.css';
 
@@ -37,8 +38,20 @@ export const BasePomodoroTimer = ({
 
   const restingTime = size - completedTime;
 
+  if (type === TimeEntryType.Pomodoro || type === TimeEntryType.Rest) {
+    return <NewTimer type={type === TimeEntryType.Pomodoro ? 'pomodoro' : 'relax'} state={isPaused ? 'paused' : 'active'}
+      length={size}
+      el={restingTime}
+      onPause={onPause}
+      onResume={onUnpause}
+      onStop={onDrop}
+    />
+  }
+
   return (
+
     <div className={styles.wrapper}>
+
       <div
         className={classnames(
           styles.timer,
