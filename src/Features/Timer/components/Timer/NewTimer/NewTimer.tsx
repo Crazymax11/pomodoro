@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { ReactNode, useEffect, useRef } from "react"
 import { Pause } from "../../../../shared/Icons/Pause";
 import { Play } from "../../../../shared/Icons/Play";
 import { Stop } from "../../../../shared/Icons/Stop";

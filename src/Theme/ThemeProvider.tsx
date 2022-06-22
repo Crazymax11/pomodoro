@@ -4,10 +4,10 @@ import { $preferedTheme, settingsEvents, Theme } from '../store/settings';
 import { ThemeContext, ThemeContextValue } from './ThemeContext';
 import { ThemeInjector } from './ThemeInjector';
 
-export const DarkThemeProvider: React.FC = ({ children }) => {
+export const DarkThemeProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const value: ThemeContextValue = {
     currentTheme: Theme.Dark,
-    setTheme: () => {},
+    setTheme: () => { },
   };
   return (
     <ThemeContext.Provider value={value}>
@@ -15,10 +15,10 @@ export const DarkThemeProvider: React.FC = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-export const LightThemeProvider: React.FC = ({ children }) => {
+export const LightThemeProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const value: ThemeContextValue = {
     currentTheme: Theme.Light,
-    setTheme: () => {},
+    setTheme: () => { },
   };
   return (
     <ThemeContext.Provider value={value}>
@@ -26,7 +26,7 @@ export const LightThemeProvider: React.FC = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-export const ChoosableThemeRrovider: React.FC = ({ children }) => {
+export const ChoosableThemeRrovider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const currentTheme = useStore($preferedTheme);
 
   const value: ThemeContextValue = {
@@ -40,7 +40,7 @@ export const ChoosableThemeRrovider: React.FC = ({ children }) => {
   );
 };
 
-export const StorybookThemeProvider: React.FC = ({ children }) => {
+export const StorybookThemeProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const [currentTheme, setTheme] = useState(Theme.Dark);
   const value: ThemeContextValue = {
     currentTheme,

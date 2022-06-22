@@ -43,7 +43,7 @@ export const TodayStatsPure = (props: Props) => {
             setShowCreationModal(false);
             props.saveEntry(entry);
           }}
-          onRemove={() => {}}
+          onRemove={() => { }}
         />
       )}
     </div>

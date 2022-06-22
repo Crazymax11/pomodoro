@@ -4,7 +4,7 @@ import { Theme } from '../store/settings';
 import { ThemeContext } from './ThemeContext';
 import styles from './ThemeInjector.module.css';
 
-export const ThemeInjector: React.FC<{ theme: Theme }> = ({ theme, children }) => {
+export const ThemeInjector: React.FC<{ theme: Theme, children: JSX.Element }> = ({ theme, children }) => {
   return <div className={classNames(styles[theme], styles.injectedRoot)}>{children}</div>;
 };
 
@@ -23,6 +23,6 @@ export const useGlobalInjector = () => {
   }, [currentTheme]);
 };
 
-export const GlobalInjector: React.FC<{ theme: Theme }> = ({ theme, children }) => {
+export const GlobalInjector: React.FC<{ theme: Theme, children: JSX.Element }> = ({ theme, children }) => {
   return <div className={classNames(styles[theme], styles.injectedRoot)}>{children}</div>;
 };

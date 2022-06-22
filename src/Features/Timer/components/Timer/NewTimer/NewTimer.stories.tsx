@@ -23,7 +23,11 @@ export const running = () => {
 	useEffect(() => {
 		setInterval(() => setCurrent(v => v > 0 ? v - 1000 : 0), 1000)
 	}, [])
-	return <NewTimer state="active" length={25000} el={25000 - current} type='pomodoro' />
+	return <NewTimer
+		onPause={() => { }}
+		onResume={() => { }}
+		onStop={() => { }}
+		state="active" length={25000} el={25000 - current} type='pomodoro' />
 }
 
 export const Paused = Template.bind({});

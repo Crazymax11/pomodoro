@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import styles from './index.module.css';
 
 type Props = {
   onClose: () => void;
+  children: ReactNode[] | ReactNode;
 };
 export const Modal: React.FC<Props> = (props) => {
   return (
