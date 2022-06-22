@@ -54,7 +54,7 @@ export const NewTimer = (props: Props) => {
 	// pomodoro = === d75952
 	const color = props.type === 'pomodoro' ? 'tomato' : 'green'
 	return <div className={styles.wrapper}>
-		<svg
+		<div className={styles.circleWrapper}><svg
 			className={styles.circle}
 			width="640" height="640" xmlns="http://www.w3.org/2000/svg"
 
@@ -63,12 +63,13 @@ export const NewTimer = (props: Props) => {
 			<circle r="69.85699" cy="81" cx="81" strokeWidth="8" stroke="#515256" fill="none" />
 			<circle ref={el => { cirlceEl.current = el }} r="69.85699" cy="81" cx="81" strokeWidth="8" stroke={color} fill="none" strokeDashoffset={440} strokeDasharray={440} />
 		</svg>
-		<div className={styles.timeWrapper}>
+			<div className={styles.timeWrapper}>
 
 
-			<div style={{ display: 'block' }}>{show}</div>
+				<div style={{ display: 'block' }}>{show}</div>
 
-		</div>
+			</div></div>
+
 		<div className={styles.buttons}>
 			{props.state === 'paused' &&
 				<div className={styles.iconButton} onClick={props.onResume}><Play size={80} color={color} /></div>}
